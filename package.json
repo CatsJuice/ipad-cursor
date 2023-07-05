@@ -10,6 +10,18 @@
   "type": "module",
   "main": "index.mjs",
   "module": "index.mjs",
+  "types": "index.d.ts",
+  "exports": {
+    "./vue": {
+      "import": "./vue/index.mjs",
+      "types": "./vue/index.d.ts",
+      "default": "./vue/index.mjs"
+    },
+    ".": {
+      "import": "./index.mjs",
+      "default": "./index.mjs"
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
