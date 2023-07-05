@@ -152,7 +152,7 @@ async function publish() {
     },
   ]);
   if (response.value) {
-    execSync("npm publish ./dist");
+    execSync("npm publish ./dist --registry https://registry.npmjs.org");
     execSync(`git tag ${packageJSON.version}`);
     execSync(`git push origin --tags`);
   }

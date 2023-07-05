@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "cd ./playground && vite",
     "build": "node ./.build.mjs",
-    "publish": "node ./.build.mjs --publish --registry https://registry.npmjs.org"
+    "publish": "node ./.build.mjs --publish"
   },
   "type": "module",
   "main": "index.mjs",
