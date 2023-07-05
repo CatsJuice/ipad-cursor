@@ -1,6 +1,6 @@
 {
   "name": "i-cursor",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "scripts": {
     "dev": "cd ./playground && vite",
@@ -19,11 +19,13 @@
     "@types/node": "^20.3.3",
     "@vitejs/plugin-vue": "^4.1.0",
     "brotli-size": "^4.0.0",
+    "bumpp": "^9.1.1",
     "chalk": "^5.3.0",
     "execa": "^7.1.1",
     "pretty-bytes": "^6.1.0",
     "prompts": "^2.4.2",
     "shx": "^0.3.4",
+    "taze": "^0.11.2",
     "tslib": "^2.6.0",
     "typescript": "^5.0.2",
     "url": "^0.11.1",
