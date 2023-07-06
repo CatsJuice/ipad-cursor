@@ -275,6 +275,7 @@ function initCursor(_config?: IpadCursorConfig) {
   createCursor();
   createStyle();
   updateCursorPosition();
+  updateCursor();
 }
 
 /**
@@ -287,6 +288,11 @@ function disposeCursor() {
   window.removeEventListener("mousemove", recordMousePosition);
   cursorEle && cursorEle.remove();
   styleTag && styleTag.remove();
+  styleTag = null;
+  cursorEle = null;
+
+  // iterate nodesMap
+  registeredNodeSet.forEach((node) => unregisterNode(node));
 }
 
 /**
@@ -414,6 +420,7 @@ function unregisterNode(node: Element) {
     node.removeEventListener(event, handler);
   });
   eventMap.delete(node);
+  (node as HTMLElement).style.setProperty("transform", "none");
 }
 
 function extractCustomStyle(node: Element) {
@@ -465,13 +472,16 @@ function registerBlockNode(_node: Element) {
   node.addEventListener("mousemove", onBlockMove, { passive: true });
   node.addEventListener("mouseleave", onBlockLeave, { passive: true });
 
+  let timer: any;
+
   function onBlockEnter() {
     const rect = node.getBoundingClientRect();
-    isActive = true;
+    timer && clearTimeout(timer);
+    timer = setTimeout(() => (isActive = true));
     const blockPadding = config.blockPadding || 0;
     let padding = blockPadding;
     if (padding === "auto") {
-      const size = Math.max(rect.width, rect.height);
+      const size = Math.min(rect.width, rect.height);
       padding = Math.max(2, Math.floor(size / 25));
     }
 
@@ -520,7 +530,8 @@ function registerBlockNode(_node: Element) {
     );
   }
   function onBlockLeave() {
-    setTimeout(() => {
+    timer && clearTimeout(timer);
+    timer = setTimeout(() => {
       isActive = false;
       cursorEle && cursorEle.classList.remove("focus");
     });
