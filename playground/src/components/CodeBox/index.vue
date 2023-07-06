@@ -3,6 +3,7 @@ import { computed, nextTick, ref, watchEffect } from "vue";
 import LanguageIcon from "../LanguageIcon.vue";
 import type { Code } from "../../types/lang";
 import { useCursor } from "../../../../src/vue";
+import { useClipboard } from "@vueuse/core";
 
 const props = defineProps<{
   codes: Array<Code>;
@@ -10,6 +11,7 @@ const props = defineProps<{
 
 const active = ref(0);
 const { updateCursor, customCursorStyle } = useCursor();
+const { copy } = useClipboard();
 
 const activeCode = computed(() => props.codes[active.value]);
 
@@ -18,6 +20,25 @@ watchEffect(() => {
     nextTick(() => updateCursor());
   }
 });
+
+function onCopy(e: MouseEvent) {
+  const el = e.target as HTMLElement;
+  const tooltip = document.createElement("div");
+  const rect = el.getBoundingClientRect();
+  tooltip.textContent = "Copied!";
+  tooltip.classList.add("tooltip");
+  tooltip.style.position = "fixed";
+  tooltip.style.top = `${rect.top + rect.height + 12}px`;
+  tooltip.style.left = `${rect.left + rect.width / 2}px`;
+  tooltip.style.transform = "translate(-50%, 0)";
+  document.body.appendChild(tooltip);
+
+  copy(activeCode.value.code);
+
+  setTimeout(() => {
+    tooltip.remove();
+  }, 1000);
+}
 </script>
 
 <template>
@@ -28,8 +49,9 @@ watchEffect(() => {
     class="code-box"
     flex="~ col nowrap gap-2"
     overflow-hidden
+    relative
   >
-    <header flex="~ gap-1" items-center w-full>
+    <header relative flex="~ gap-3" items-center w-full>
       <div v-for="({ lang, title }, index) in codes" :key="title || lang">
         <div
           data-cursor="block"
@@ -73,10 +95,36 @@ watchEffect(() => {
         :code="activeCode.code"
       />
     </main>
+
+    <div
+      backdrop-blur-12px
+      right-12px
+      top-54px
+      absolute
+      w-36px
+      h-36px
+      class="icon-btn"
+      data-cursor="block"
+      p="1"
+      text-sm
+      flex-center
+      @click="onCopy"
+      text-white
+    >
+      <div i-carbon:copy />
+    </div>
   </div>
 </template>
 
-<style scoped>
+<style>
+.tooltip {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px) saturate(180%);
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
 .lang-tab {
   opacity: 0.8;
 }
