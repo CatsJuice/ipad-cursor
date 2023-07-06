@@ -1,5 +1,3 @@
-import { clamp, objectKeys } from "@catsjuice/utils";
-
 // types
 export type ICursorType = "normal" | "text" | "block";
 /**
@@ -122,6 +120,9 @@ const config = getDefaultConfig();
  * Util collection
  */
 class Utils {
+  static clamp(num: number, min: number, max: number) {
+    return Math.min(Math.max(num, min), max);
+  }
   static isNum(v: string | number) {
     return typeof v === "number" || /^\d+$/.test(v);
   }
@@ -182,7 +183,7 @@ class Utils {
     const source = sources.shift();
     if (!source) return obj;
     if (this.isMergebleObject(obj) && this.isMergebleObject(source)) {
-      objectKeys(source).forEach((key) => {
+      Utils.objectKeys(source).forEach((key) => {
         if (this.isMergebleObject(source[key])) {
           if (!(obj as any)[key]) Object.assign(obj as any, { [key]: {} });
           this.mergeDeep((obj as any)[key], source[key]);
@@ -301,7 +302,7 @@ function disposeCursor() {
  */
 function updateConfig(_config: IpadCursorConfig) {
   if ("adsorptionStrength" in _config) {
-    config.adsorptionStrength = clamp(_config.adsorptionStrength || 10, 0, 30);
+    config.adsorptionStrength = Utils.clamp(_config.adsorptionStrength || 10, 0, 30);
   }
   return Utils.mergeDeep(config, _config);
 }
@@ -427,7 +428,7 @@ function extractCustomStyle(node: Element) {
   const customStyleRaw = node.getAttribute("data-cursor-style");
   const styleObj: Record<string, any> = {};
   if (customStyleRaw) {
-    customStyleRaw.split(/(,|;)/).forEach((style) => {
+    customStyleRaw.split(/(;)/).forEach((style) => {
       const [key, value] = style.split(":").map((s) => s.trim());
       styleObj[key] = value;
     });

@@ -27,9 +27,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@formkit/auto-animate": "^0.7.0",
+    "@highlightjs/vue-plugin": "^2.1.0",
     "@iconify-json/carbon": "^1.1.18",
+    "@iconify-json/logos": "^1.1.33",
     "@rollup/plugin-terser": "^0.4.3",
     "@rollup/plugin-typescript": "^11.1.2",
+    "@types/highlight.js": "^10.1.0",
     "@types/node": "^20.3.3",
     "@unhead/vue": "^1.1.30",
     "@vitejs/plugin-vue": "^4.1.0",
@@ -38,6 +42,8 @@
     "bumpp": "^9.1.1",
     "chalk": "^5.3.0",
     "execa": "^7.1.1",
+    "highlight.js": "^11.8.0",
+    "highlightjs-vue": "^1.0.0",
     "pretty-bytes": "^6.1.0",
     "prompts": "^2.4.2",
     "shx": "^0.3.4",
@@ -49,10 +55,8 @@
     "vite": "^4.3.9",
     "vite-ssg": "^0.23.0",
     "vue": "^3.2.47",
+    "vue-highlight.js": "^3.1.0",
     "vue-router": "^4.2.3",
     "vue-tsc": "^1.4.2"
-  },
-  "dependencies": {
-    "@catsjuice/utils": "^0.1.4"
   }
 }

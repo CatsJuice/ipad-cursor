@@ -4,21 +4,31 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
+devDependencies:
   '@catsjuice/utils':
     specifier: ^0.1.4
     version: registry.npmmirror.com/@catsjuice/utils@0.1.4
-
-devDependencies:
+  '@formkit/auto-animate':
+    specifier: ^0.7.0
+    version: registry.npmmirror.com/@formkit/auto-animate@0.7.0
+  '@highlightjs/vue-plugin':
+    specifier: ^2.1.0
+    version: registry.npmmirror.com/@highlightjs/vue-plugin@2.1.0(highlight.js@11.8.0)(vue@3.2.47)
   '@iconify-json/carbon':
     specifier: ^1.1.18
     version: registry.npmmirror.com/@iconify-json/carbon@1.1.18
+  '@iconify-json/logos':
+    specifier: ^1.1.33
+    version: registry.npmmirror.com/@iconify-json/logos@1.1.33
   '@rollup/plugin-terser':
     specifier: ^0.4.3
     version: registry.npmmirror.com/@rollup/plugin-terser@0.4.3
   '@rollup/plugin-typescript':
     specifier: ^11.1.2
     version: registry.npmmirror.com/@rollup/plugin-typescript@11.1.2(tslib@2.6.0)(typescript@5.0.2)
+  '@types/highlight.js':
+    specifier: ^10.1.0
+    version: registry.npmmirror.com/@types/highlight.js@10.1.0
   '@types/node':
     specifier: ^20.3.3
     version: registry.npmmirror.com/@types/node@20.3.3
@@ -43,6 +53,12 @@ devDependencies:
   execa:
     specifier: ^7.1.1
     version: registry.npmmirror.com/execa@7.1.1
+  highlight.js:
+    specifier: ^11.8.0
+    version: registry.npmmirror.com/highlight.js@11.8.0
+  highlightjs-vue:
+    specifier: ^1.0.0
+    version: registry.npmmirror.com/highlightjs-vue@1.0.0
   pretty-bytes:
     specifier: ^6.1.0
     version: registry.npmmirror.com/pretty-bytes@6.1.0
@@ -63,7 +79,7 @@ devDependencies:
     version: registry.npmmirror.com/typescript@5.0.2
   unocss:
     specifier: ^0.53.4
-    version: registry.npmmirror.com/unocss@0.53.4(postcss@8.4.24)(vite@4.3.9)
+    version: registry.npmmirror.com/unocss@0.53.4(postcss@8.4.25)(vite@4.3.9)
   url:
     specifier: ^0.11.1
     version: registry.npmmirror.com/url@0.11.1
@@ -76,6 +92,9 @@ devDependencies:
   vue:
     specifier: ^3.2.47
     version: registry.npmmirror.com/vue@3.2.47
+  vue-highlight.js:
+    specifier: ^3.1.0
+    version: registry.npmmirror.com/vue-highlight.js@3.1.0(highlight.js@11.8.0)(vue@3.2.47)
   vue-router:
     specifier: ^4.2.3
     version: registry.npmmirror.com/vue-router@4.2.3(vue@3.2.47)
@@ -131,10 +150,10 @@ packages:
     engines: {node: '>=6.9.0'}
     dev: true
 
-  registry.npmmirror.com/@babel/parser@7.22.6:
-    resolution: {integrity: sha512-EIQu22vNkceq3LbjAq7knDf/UmtI2qbcNI8GRBlijez6TpQLvSodJPYfydQmNA5buwkxxxa/PVI44jjYZ+/cLw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@babel/parser/-/parser-7.22.6.tgz}
+  registry.npmmirror.com/@babel/parser@7.22.7:
+    resolution: {integrity: sha512-7NF8pOkHP5o2vpmGgNGcfAeCvOYhGLyA3Z4eBQkT1RJlWu47n63bCs93QfJ2hIAFCil7L5P2IWhs1oToVgrL0Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@babel/parser/-/parser-7.22.7.tgz}
     name: '@babel/parser'
-    version: 7.22.6
+    version: 7.22.7
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
@@ -156,7 +175,7 @@ packages:
     resolution: {integrity: sha512-A/x+9DmkanycnBq8+Q3K7CbWtm86/qmPN7mgFXCqCBl+X2GB0WVa7RV65klU5lS+DAE92nw+wpUH7wd7hTloJQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@catsjuice/utils/-/utils-0.1.4.tgz}
     name: '@catsjuice/utils'
     version: 0.1.4
-    dev: false
+    dev: true
 
   registry.npmmirror.com/@esbuild/android-arm64@0.17.19:
     resolution: {integrity: sha512-KBMWvEZooR7+kzY0BtbTQn0OAYY7CsiydT63pVEaPtVYF0hXbUaOyZog37DKxK7NF3XacBJOpYT4adIJh+avxA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@esbuild/android-arm64/-/android-arm64-0.17.19.tgz}
@@ -400,10 +419,37 @@ packages:
     dev: true
     optional: true
 
+  registry.npmmirror.com/@formkit/auto-animate@0.7.0:
+    resolution: {integrity: sha512-RczHUr0AhRPssREoNdRjLfk2b/id9/DFnbIq18QM8L7E4zNV3XH+WO480EZ46BQHDEsv76YPJ0JbG2Y2i3GfXw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@formkit/auto-animate/-/auto-animate-0.7.0.tgz}
+    name: '@formkit/auto-animate'
+    version: 0.7.0
+    dev: true
+
+  registry.npmmirror.com/@highlightjs/vue-plugin@2.1.0(highlight.js@11.8.0)(vue@3.2.47):
+    resolution: {integrity: sha512-E+bmk4ncca+hBEYRV2a+1aIzIV0VSY/e5ArjpuSN9IO7wBJrzUE2u4ESCwrbQD7sAy+jWQjkV5qCCWgc+pu7CQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@highlightjs/vue-plugin/-/vue-plugin-2.1.0.tgz}
+    id: registry.npmmirror.com/@highlightjs/vue-plugin/2.1.0
+    name: '@highlightjs/vue-plugin'
+    version: 2.1.0
+    peerDependencies:
+      highlight.js: ^11.0.1
+      vue: ^3
+    dependencies:
+      highlight.js: registry.npmmirror.com/highlight.js@11.8.0
+      vue: registry.npmmirror.com/vue@3.2.47
+    dev: true
+
   registry.npmmirror.com/@iconify-json/carbon@1.1.18:
     resolution: {integrity: sha512-RbKET6KS9xUMeYVq1FUH3UUA7AYNcnApkHt2AccCwTWTQQs/O58ji4Of6z6PhRajGlbfvrJzT/Uqh19OKECRvA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@iconify-json/carbon/-/carbon-1.1.18.tgz}
     name: '@iconify-json/carbon'
     version: 1.1.18
+    dependencies:
+      '@iconify/types': registry.npmmirror.com/@iconify/types@2.0.0
+    dev: true
+
+  registry.npmmirror.com/@iconify-json/logos@1.1.33:
+    resolution: {integrity: sha512-XHnob/dyib1oCaHZV0yRLXUfGQAr46pTuO/Y+jx9ImVBVb5jyZfJ+PLgro5pp8fyQkXWV2vq7pdR0yP5s4gcvg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@iconify-json/logos/-/logos-1.1.33.tgz}
+    name: '@iconify-json/logos'
+    version: 1.1.33
     dependencies:
       '@iconify/types': registry.npmmirror.com/@iconify/types@2.0.0
     dev: true
@@ -759,6 +805,15 @@ packages:
     version: 1.0.1
     dev: true
 
+  registry.npmmirror.com/@types/highlight.js@10.1.0:
+    resolution: {integrity: sha512-77hF2dGBsOgnvZll1vymYiNUtqJ8cJfXPD6GG/2M0aLRc29PkvB7Au6sIDjIEFcSICBhCh2+Pyq6WSRS7LUm6A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/highlight.js/-/highlight.js-10.1.0.tgz}
+    name: '@types/highlight.js'
+    version: 10.1.0
+    deprecated: This is a stub types definition. highlight.js provides its own type definitions, so you do not need this installed.
+    dependencies:
+      highlight.js: registry.npmmirror.com/highlight.js@11.8.0
+    dev: true
+
   registry.npmmirror.com/@types/node@20.3.3:
     resolution: {integrity: sha512-wheIYdr4NYML61AjC8MKj/2jrR/kDQri/CIpVoZwldwhnIrD/j9jIU5bJ8yBKuB2VhpFV7Ab6G2XkBjv9r9Zzw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-20.3.3.tgz}
     name: '@types/node'
@@ -883,7 +938,7 @@ packages:
       sirv: registry.npmmirror.com/sirv@2.0.3
     dev: true
 
-  registry.npmmirror.com/@unocss/postcss@0.53.4(postcss@8.4.24):
+  registry.npmmirror.com/@unocss/postcss@0.53.4(postcss@8.4.25):
     resolution: {integrity: sha512-G7ZWqUszJiXrQVOzLBzOFZwGIVGwH695lE75NufQi8tXQF9QphGKT0t7AX1NRxA3IZpZW2Twxa/tZYRh2PJQAg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@unocss/postcss/-/postcss-0.53.4.tgz}
     id: registry.npmmirror.com/@unocss/postcss/0.53.4
     name: '@unocss/postcss'
@@ -897,7 +952,7 @@ packages:
       css-tree: registry.npmmirror.com/css-tree@2.3.1
       fast-glob: registry.npmmirror.com/fast-glob@3.3.0
       magic-string: registry.npmmirror.com/magic-string@0.30.1
-      postcss: registry.npmmirror.com/postcss@8.4.24
+      postcss: registry.npmmirror.com/postcss@8.4.25
     dev: true
 
   registry.npmmirror.com/@unocss/preset-attributify@0.53.4:
@@ -1125,7 +1180,7 @@ packages:
     name: '@vue/compiler-core'
     version: 3.2.47
     dependencies:
-      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.6
+      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.7
       '@vue/shared': registry.npmmirror.com/@vue/shared@3.2.47
       estree-walker: registry.npmmirror.com/estree-walker@2.0.2
       source-map: registry.npmmirror.com/source-map@0.6.1
@@ -1136,7 +1191,7 @@ packages:
     name: '@vue/compiler-core'
     version: 3.3.4
     dependencies:
-      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.6
+      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.7
       '@vue/shared': registry.npmmirror.com/@vue/shared@3.3.4
       estree-walker: registry.npmmirror.com/estree-walker@2.0.2
       source-map-js: registry.npmmirror.com/source-map-js@1.0.2
@@ -1165,7 +1220,7 @@ packages:
     name: '@vue/compiler-sfc'
     version: 3.2.47
     dependencies:
-      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.6
+      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.7
       '@vue/compiler-core': registry.npmmirror.com/@vue/compiler-core@3.2.47
       '@vue/compiler-dom': registry.npmmirror.com/@vue/compiler-dom@3.2.47
       '@vue/compiler-ssr': registry.npmmirror.com/@vue/compiler-ssr@3.2.47
@@ -1173,7 +1228,7 @@ packages:
       '@vue/shared': registry.npmmirror.com/@vue/shared@3.2.47
       estree-walker: registry.npmmirror.com/estree-walker@2.0.2
       magic-string: registry.npmmirror.com/magic-string@0.25.9
-      postcss: registry.npmmirror.com/postcss@8.4.24
+      postcss: registry.npmmirror.com/postcss@8.4.25
       source-map: registry.npmmirror.com/source-map@0.6.1
     dev: true
 
@@ -1182,7 +1237,7 @@ packages:
     name: '@vue/compiler-sfc'
     version: 3.3.4
     dependencies:
-      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.6
+      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.7
       '@vue/compiler-core': registry.npmmirror.com/@vue/compiler-core@3.3.4
       '@vue/compiler-dom': registry.npmmirror.com/@vue/compiler-dom@3.3.4
       '@vue/compiler-ssr': registry.npmmirror.com/@vue/compiler-ssr@3.3.4
@@ -1190,7 +1245,7 @@ packages:
       '@vue/shared': registry.npmmirror.com/@vue/shared@3.3.4
       estree-walker: registry.npmmirror.com/estree-walker@2.0.2
       magic-string: registry.npmmirror.com/magic-string@0.30.1
-      postcss: registry.npmmirror.com/postcss@8.4.24
+      postcss: registry.npmmirror.com/postcss@8.4.25
       source-map-js: registry.npmmirror.com/source-map-js@1.0.2
     dev: true
 
@@ -1223,7 +1278,7 @@ packages:
     name: '@vue/reactivity-transform'
     version: 3.2.47
     dependencies:
-      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.6
+      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.7
       '@vue/compiler-core': registry.npmmirror.com/@vue/compiler-core@3.2.47
       '@vue/shared': registry.npmmirror.com/@vue/shared@3.2.47
       estree-walker: registry.npmmirror.com/estree-walker@2.0.2
@@ -1235,7 +1290,7 @@ packages:
     name: '@vue/reactivity-transform'
     version: 3.3.4
     dependencies:
-      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.6
+      '@babel/parser': registry.npmmirror.com/@babel/parser@7.22.7
       '@vue/compiler-core': registry.npmmirror.com/@vue/compiler-core@3.3.4
       '@vue/shared': registry.npmmirror.com/@vue/shared@3.3.4
       estree-walker: registry.npmmirror.com/estree-walker@2.0.2
@@ -1840,6 +1895,13 @@ packages:
     version: 2.0.0
     dev: true
 
+  registry.npmmirror.com/detect-indent@5.0.0:
+    resolution: {integrity: sha512-rlpvsxUtM0PQvy9iZe640/IWwWYyBsTApREbA1pHOpmOUIl9MkP/U4z7vTtg4Oaojvqhxt7sdufnT0EzGaR31g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/detect-indent/-/detect-indent-5.0.0.tgz}
+    name: detect-indent
+    version: 5.0.0
+    engines: {node: '>=4'}
+    dev: true
+
   registry.npmmirror.com/detect-indent@7.0.1:
     resolution: {integrity: sha512-Mc7QhQ8s+cLrnUfU/Ji94vG/r8M26m8f++vyres4ZoojaRDpZ1eSIh/EpzLNwlWuvzSZ3UbDFspjFvTDXe6e/g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/detect-indent/-/detect-indent-7.0.1.tgz}
     name: detect-indent
@@ -2272,6 +2334,19 @@ packages:
     hasBin: true
     dev: true
 
+  registry.npmmirror.com/highlight.js@11.8.0:
+    resolution: {integrity: sha512-MedQhoqVdr0U6SSnWPzfiadUcDHfN/Wzq25AkXiQv9oiOO/sG0S7XkvpFIqWBl9Yq1UYyYOOVORs5UW2XlPyzg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/highlight.js/-/highlight.js-11.8.0.tgz}
+    name: highlight.js
+    version: 11.8.0
+    engines: {node: '>=12.0.0'}
+    dev: true
+
+  registry.npmmirror.com/highlightjs-vue@1.0.0:
+    resolution: {integrity: sha512-PDEfEF102G23vHmPhLyPboFCD+BkMGu+GuJe2d9/eH4FsCwvgBpnc9n0pGE+ffKdph38s6foEZiEjdgHdzp+IA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/highlightjs-vue/-/highlightjs-vue-1.0.0.tgz}
+    name: highlightjs-vue
+    version: 1.0.0
+    dev: true
+
   registry.npmmirror.com/hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/hookable/-/hookable-5.5.3.tgz}
     name: hookable
@@ -2396,6 +2471,13 @@ packages:
     name: imurmurhash
     version: 0.1.4
     engines: {node: '>=0.8.19'}
+    dev: true
+
+  registry.npmmirror.com/indent-string@3.2.0:
+    resolution: {integrity: sha512-BYqTHXTGUIvg7t1r4sJNKcbDZkL92nkXA8YtRpbjFHRHGDL/NtUeiBJMeE60kIFN/Mg8ESaWQvftaYMGJzQZCQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/indent-string/-/indent-string-3.2.0.tgz}
+    name: indent-string
+    version: 3.2.0
+    engines: {node: '>=4'}
     dev: true
 
   registry.npmmirror.com/indent-string@4.0.0:
@@ -2558,7 +2640,7 @@ packages:
       http-proxy-agent: registry.npmmirror.com/http-proxy-agent@5.0.0
       https-proxy-agent: registry.npmmirror.com/https-proxy-agent@5.0.1
       is-potential-custom-element-name: registry.npmmirror.com/is-potential-custom-element-name@1.0.1
-      nwsapi: registry.npmmirror.com/nwsapi@2.2.6
+      nwsapi: registry.npmmirror.com/nwsapi@2.2.7
       parse5: registry.npmmirror.com/parse5@7.1.2
       rrweb-cssom: registry.npmmirror.com/rrweb-cssom@0.6.0
       saxes: registry.npmmirror.com/saxes@6.0.0
@@ -3126,10 +3208,10 @@ packages:
       set-blocking: registry.npmmirror.com/set-blocking@2.0.0
     dev: true
 
-  registry.npmmirror.com/nwsapi@2.2.6:
-    resolution: {integrity: sha512-vSZ4miHQ4FojLjmz2+ux4B0/XA16jfwt/LBzIUftDpRd8tujHFkXjMyLwjS08fIZCzesj2z7gJukOKJwqebJAQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/nwsapi/-/nwsapi-2.2.6.tgz}
+  registry.npmmirror.com/nwsapi@2.2.7:
+    resolution: {integrity: sha512-ub5E4+FBPKwAZx0UwIQOjYWGHTEq5sPqHQNRN8Z9e4A7u3Tj1weLJsL59yH9vmvqEtBHaOmT6cYQKIZOxp35FQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/nwsapi/-/nwsapi-2.2.7.tgz}
     name: nwsapi
-    version: 2.2.6
+    version: 2.2.7
     dev: true
 
   registry.npmmirror.com/object-inspect@1.12.3:
@@ -3332,10 +3414,10 @@ packages:
       pathe: registry.npmmirror.com/pathe@1.1.1
     dev: true
 
-  registry.npmmirror.com/postcss@8.4.24:
-    resolution: {integrity: sha512-M0RzbcI0sO/XJNucsGjvWU9ERWxb/ytp1w6dKtxTKgixdtQDq4rmx/g8W1hnaheq9jgwL/oyEdH5Bc4WwJKMqg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/postcss/-/postcss-8.4.24.tgz}
+  registry.npmmirror.com/postcss@8.4.25:
+    resolution: {integrity: sha512-7taJ/8t2av0Z+sQEvNzCkpDynl0tX3uJMCODi6nT3PfASC7dYCWV9aQ+uiCf+KBD4SEFcu+GvJdGdwzQ6OSjCw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/postcss/-/postcss-8.4.25.tgz}
     name: postcss
-    version: 8.4.24
+    version: 8.4.25
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: registry.npmmirror.com/nanoid@3.3.6
@@ -3505,6 +3587,16 @@ packages:
       resolve: registry.npmmirror.com/resolve@1.22.2
     dev: true
 
+  registry.npmmirror.com/redent@2.0.0:
+    resolution: {integrity: sha512-XNwrTx77JQCEMXTeb8movBKuK75MgH0RZkujNuDKCezemx/voapl9i2gCSi8WWm8+ox5ycJi1gxF22fR7c0Ciw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/redent/-/redent-2.0.0.tgz}
+    name: redent
+    version: 2.0.0
+    engines: {node: '>=4'}
+    dependencies:
+      indent-string: registry.npmmirror.com/indent-string@3.2.0
+      strip-indent: registry.npmmirror.com/strip-indent@2.0.0
+    dev: true
+
   registry.npmmirror.com/relateurl@0.2.7:
     resolution: {integrity: sha512-G08Dxvm4iDN3MLM0EsP62EDV9IuhXPR6blNz6Utcp7zyV3tr4HVNINt6MpaRWbxoOHT3Q7YN2P+jaHX8vUbgog==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/relateurl/-/relateurl-0.2.7.tgz}
     name: relateurl
@@ -3559,10 +3651,10 @@ packages:
       glob: registry.npmmirror.com/glob@7.2.3
     dev: true
 
-  registry.npmmirror.com/rollup@3.26.1:
-    resolution: {integrity: sha512-I5gJCSpSMr3U9wv4D5YA8g7w7cj3eaSDeo7t+JcaFQOmoOUBgu4K9iMp8k3EZnwbJrjQxUMSKxMyB8qEQzzaSg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/rollup/-/rollup-3.26.1.tgz}
+  registry.npmmirror.com/rollup@3.26.2:
+    resolution: {integrity: sha512-6umBIGVz93er97pMgQO08LuH3m6PUb3jlDUUGFsNJB6VgTCUaDFpupf5JfU30529m/UKOgmiX+uY6Sx8cOYpLA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/rollup/-/rollup-3.26.2.tgz}
     name: rollup
-    version: 3.26.1
+    version: 3.26.2
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
@@ -3895,6 +3987,13 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  registry.npmmirror.com/strip-indent@2.0.0:
+    resolution: {integrity: sha512-RsSNPLpq6YUL7QYy44RnPVTn/lcVZtb48Uof3X5JLbF4zD/Gs7ZFDv2HWol+leoQN2mT86LAzSshGfkTlSOpsA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/strip-indent/-/strip-indent-2.0.0.tgz}
+    name: strip-indent
+    version: 2.0.0
+    engines: {node: '>=4'}
+    dev: true
+
   registry.npmmirror.com/supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz}
     name: supports-preserve-symlinks-flag
@@ -3999,6 +4098,12 @@ packages:
       punycode: registry.npmmirror.com/punycode@2.3.0
     dev: true
 
+  registry.npmmirror.com/tslib@1.14.1:
+    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tslib/-/tslib-1.14.1.tgz}
+    name: tslib
+    version: 1.14.1
+    dev: true
+
   registry.npmmirror.com/tslib@2.6.0:
     resolution: {integrity: sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tslib/-/tslib-2.6.0.tgz}
     name: tslib
@@ -4100,7 +4205,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     dev: true
 
-  registry.npmmirror.com/unocss@0.53.4(postcss@8.4.24)(vite@4.3.9):
+  registry.npmmirror.com/unocss@0.53.4(postcss@8.4.25)(vite@4.3.9):
     resolution: {integrity: sha512-UUEi+oh1rngHHP0DVESRS+ScoKMRF8q6GIQrElHb67gqG7GDEGpy3oocIA/6+1t71I4FFvnnxLMGIo9qAD0TEw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/unocss/-/unocss-0.53.4.tgz}
     id: registry.npmmirror.com/unocss/0.53.4
     name: unocss
@@ -4116,7 +4221,7 @@ packages:
       '@unocss/cli': registry.npmmirror.com/@unocss/cli@0.53.4
       '@unocss/core': registry.npmmirror.com/@unocss/core@0.53.4
       '@unocss/extractor-arbitrary-variants': registry.npmmirror.com/@unocss/extractor-arbitrary-variants@0.53.4
-      '@unocss/postcss': registry.npmmirror.com/@unocss/postcss@0.53.4(postcss@8.4.24)
+      '@unocss/postcss': registry.npmmirror.com/@unocss/postcss@0.53.4(postcss@8.4.25)
       '@unocss/preset-attributify': registry.npmmirror.com/@unocss/preset-attributify@0.53.4
       '@unocss/preset-icons': registry.npmmirror.com/@unocss/preset-icons@0.53.4
       '@unocss/preset-mini': registry.npmmirror.com/@unocss/preset-mini@0.53.4
@@ -4255,8 +4360,8 @@ packages:
     dependencies:
       '@types/node': registry.npmmirror.com/@types/node@20.3.3
       esbuild: registry.npmmirror.com/esbuild@0.17.19
-      postcss: registry.npmmirror.com/postcss@8.4.24
-      rollup: registry.npmmirror.com/rollup@3.26.1
+      postcss: registry.npmmirror.com/postcss@8.4.25
+      rollup: registry.npmmirror.com/rollup@3.26.2
     optionalDependencies:
       fsevents: registry.npmmirror.com/fsevents@2.3.2
     dev: true
@@ -4276,6 +4381,22 @@ packages:
       '@vue/composition-api':
         optional: true
     dependencies:
+      vue: registry.npmmirror.com/vue@3.2.47
+    dev: true
+
+  registry.npmmirror.com/vue-highlight.js@3.1.0(highlight.js@11.8.0)(vue@3.2.47):
+    resolution: {integrity: sha512-i55SERtdV0CYQppGo29iT6NOq+oOenOKVwkLWZRt7bSynbsQoj/e8GJy/5xL1s5OOYObC/CxA39bRadVyPQt1A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vue-highlight.js/-/vue-highlight.js-3.1.0.tgz}
+    id: registry.npmmirror.com/vue-highlight.js/3.1.0
+    name: vue-highlight.js
+    version: 3.1.0
+    peerDependencies:
+      highlight.js: ^9.11.0
+      vue: '2'
+    dependencies:
+      detect-indent: registry.npmmirror.com/detect-indent@5.0.0
+      highlight.js: registry.npmmirror.com/highlight.js@11.8.0
+      redent: registry.npmmirror.com/redent@2.0.0
+      tslib: registry.npmmirror.com/tslib@1.14.1
       vue: registry.npmmirror.com/vue@3.2.47
     dev: true
 
