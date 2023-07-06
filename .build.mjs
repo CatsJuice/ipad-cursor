@@ -77,6 +77,11 @@ async function bundleDeclarations() {
     `${rootDir}/dist/index.d.ts`,
   ]);
   await execa("shx", [
+    "cp",
+    `${rootDir}/dist/index.d.ts`,
+    `${rootDir}/src/index.d.ts`,
+  ]);
+  await execa("shx", [
     "mv",
     `${rootDir}/dist/src/vue/index.d.ts`,
     `${rootDir}/dist/vue/index.d.ts`,
