@@ -6,6 +6,7 @@
     "execa",
     "Mergeble",
     "prismjs",
-    "taze"
+    "taze",
+    "unhead"
   ]
 }

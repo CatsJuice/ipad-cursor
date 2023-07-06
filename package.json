@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "cd ./playground && vite",
     "build": "node ./.build.mjs",
+    "build:playground": "cd ./playground && vite-ssg build -c ./vite.config.ts",
     "publish": "node ./.build.mjs --publish"
   },
   "type": "module",
@@ -30,6 +31,7 @@
     "@rollup/plugin-terser": "^0.4.3",
     "@rollup/plugin-typescript": "^11.1.2",
     "@types/node": "^20.3.3",
+    "@unhead/vue": "^1.1.30",
     "@vitejs/plugin-vue": "^4.1.0",
     "@vueuse/core": "^10.2.1",
     "brotli-size": "^4.0.0",
@@ -45,7 +47,9 @@
     "unocss": "^0.53.4",
     "url": "^0.11.1",
     "vite": "^4.3.9",
+    "vite-ssg": "^0.23.0",
     "vue": "^3.2.47",
+    "vue-router": "^4.2.3",
     "vue-tsc": "^1.4.2"
   },
   "dependencies": {

@@ -1,23 +1,38 @@
 <script setup lang="ts">
 import AppHeader from "./components/AppHeader.vue";
-import Home from "./components/Home.vue";
-import { useCursor } from '../../src/vue/index';
+import { useCursor } from "../../src/vue/index";
 import { watchEffect } from "vue";
-import { useDark } from '@vueuse/core';
+import { useDark } from "@vueuse/core";
+import { useHead } from "@unhead/vue";
 
-const isDark = useDark()
+const isDark = useDark();
 const { updateConfig } = useCursor();
 
-watchEffect(() => updateConfig({
-  blockStyle: {
-    border: `1px solid ${isDark.value ? '#ffffff80' : '#00000020'}`
-  }
-}))
+const appName = "ipad-cursor";
+const appDesc = "iPad Cursor Effect in Browser";
+useHead({
+  title: appName,
+  link: [{ rel: "icon", href: "/ipad-cursor.svg", sizes: "any" }],
+  meta: [
+    { name: "description", content: appDesc },
+    { property: "og:title", content: appName },
+    { property: "og:description", content: appDesc },
+    { property: "og:image", content: "/og-image.jpg" },
+  ],
+});
+
+watchEffect(() =>
+  updateConfig({
+    blockStyle: {
+      border: `1px solid ${isDark.value ? "#ffffff80" : "#00000020"}`,
+    },
+  })
+);
 </script>
 
 <template>
   <AppHeader fixed top-0 right-0 />
-  <Home />
+  <router-view />
 </template>
 
 <style>
@@ -36,7 +51,6 @@ a:hover {
   color: inherit;
   text-decoration: none;
 }
-
 
 html {
   --dark: #222;
