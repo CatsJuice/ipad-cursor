@@ -47,7 +47,7 @@ Mouse effect hacking of iPad in browser that can be used in any frameworks
   initCursor()
   ```
 
-  > ⚠️ **Notice**: As so far, you need to manage `when to updateCursor` yourself. Make sure you call `updateCursor` after dom updated.
+  > ⚠️ **Notice**: As so far, you need to manage `when to updateCursor` yourself. Make sure to call `updateCursor` after dom updated.
   > In the future, there maybe a better way to handle this, see [Roadmap](#roadmap) for more details.
 
 ## Principle
@@ -81,7 +81,7 @@ When mouse enter the element, apply styles.
 
 ## Config
 
-It is recommended to see `index.d.ts` in the npm package.
+It is recommended to see [index.d.ts](./src/index.d.ts) in the npm package.
 
 ```ts
 /**
@@ -183,6 +183,9 @@ export interface IpadCursorStyle {
 
 ## Roadmap
 
+- [ ] Add Chinese document
+- [ ] API Docs
+- [ ] More examples
 - [ ] Auto detect dom update, and call `updateCursor` automatically
     - Maybe use [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver)
 
