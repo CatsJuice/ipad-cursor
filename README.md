@@ -23,7 +23,7 @@ Mouse effect hacking of iPad in browser that can be used in any frameworks
   <script src="https://unpkg.com/ipad-cursor@latest" />
   ```
 
-  See [ipad-cursor.oooo.so](https://ipad-cursor.oooo.so) for more details.
+  See [cursor.oooo.so](https://ipad-cursor.oooo.so) for more details.
 
 ## Usage
 
