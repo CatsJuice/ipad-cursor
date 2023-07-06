@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 devDependencies:
-  '@catsjuice/utils':
-    specifier: ^0.1.4
-    version: registry.npmmirror.com/@catsjuice/utils@0.1.4
   '@formkit/auto-animate':
     specifier: ^0.7.0
     version: registry.npmmirror.com/@formkit/auto-animate@0.7.0
@@ -20,6 +17,9 @@ devDependencies:
   '@iconify-json/logos':
     specifier: ^1.1.33
     version: registry.npmmirror.com/@iconify-json/logos@1.1.33
+  '@iconify-json/vscode-icons':
+    specifier: ^1.1.25
+    version: registry.npmmirror.com/@iconify-json/vscode-icons@1.1.25
   '@rollup/plugin-terser':
     specifier: ^0.4.3
     version: registry.npmmirror.com/@rollup/plugin-terser@0.4.3
@@ -169,12 +169,6 @@ packages:
       '@babel/helper-string-parser': registry.npmmirror.com/@babel/helper-string-parser@7.22.5
       '@babel/helper-validator-identifier': registry.npmmirror.com/@babel/helper-validator-identifier@7.22.5
       to-fast-properties: registry.npmmirror.com/to-fast-properties@2.0.0
-    dev: true
-
-  registry.npmmirror.com/@catsjuice/utils@0.1.4:
-    resolution: {integrity: sha512-A/x+9DmkanycnBq8+Q3K7CbWtm86/qmPN7mgFXCqCBl+X2GB0WVa7RV65klU5lS+DAE92nw+wpUH7wd7hTloJQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@catsjuice/utils/-/utils-0.1.4.tgz}
-    name: '@catsjuice/utils'
-    version: 0.1.4
     dev: true
 
   registry.npmmirror.com/@esbuild/android-arm64@0.17.19:
@@ -450,6 +444,14 @@ packages:
     resolution: {integrity: sha512-XHnob/dyib1oCaHZV0yRLXUfGQAr46pTuO/Y+jx9ImVBVb5jyZfJ+PLgro5pp8fyQkXWV2vq7pdR0yP5s4gcvg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@iconify-json/logos/-/logos-1.1.33.tgz}
     name: '@iconify-json/logos'
     version: 1.1.33
+    dependencies:
+      '@iconify/types': registry.npmmirror.com/@iconify/types@2.0.0
+    dev: true
+
+  registry.npmmirror.com/@iconify-json/vscode-icons@1.1.25:
+    resolution: {integrity: sha512-TA4NuBffMLHlAAZ2URBtPy39+SuO35ThjUvaaUrd8+/KYijIUAU5prHW8j+EGVtajFZl+DT1TxAVdOXpijuFSg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@iconify-json/vscode-icons/-/vscode-icons-1.1.25.tgz}
+    name: '@iconify-json/vscode-icons'
+    version: 1.1.25
     dependencies:
       '@iconify/types': registry.npmmirror.com/@iconify/types@2.0.0
     dev: true

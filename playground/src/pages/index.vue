@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useCursor } from "../../../src/vue/index";
+import { basicCodes } from "../codes/basic";
+import CodeBox from "../components/CodeBox/index.vue";
 const { CursorType, customCursorStyle, initCursor, disposeCursor } = useCursor({
   normalStyle: {
     backdropBlur: 12,
@@ -33,28 +35,39 @@ const btns = [
 
 <template>
   <div flex="~ col" justify-center items-center gap-2>
-    <div
-      w-100px
-      h-100px
-      :data-cursor="CursorType.BLOCK"
-      :data-cursor-style="customCursorStyle({ radius: 30 })"
-    >
-      <img w-full h-full src="/ipad-cursor.svg" />
-    </div>
-    <h2
-      my-0
-      data-cursor="text"
-      :data-cursor-style="
-        customCursorStyle({
-          background: 'currentColor',
-        })
-      "
-    >
-      iPad Cursor
-    </h2>
-    <div data-cursor="text">
-      <div>Hack iPad's mouse effect in browser,</div>
-      <div>can be used in any frameworks</div>
+    <div flex="~ col gap-10" md:flex="~ row" gap-1 items-start justify-between>
+      <div flex="~ row gap-4" md:flex="~ col" md:h-full items-start justify-between h-auto min-w-300px>
+        <!-- icon -->
+        <div
+          w-100px
+          h-100px
+          :data-cursor="CursorType.BLOCK"
+          :data-cursor-style="customCursorStyle({ radius: 30 })"
+        >
+          <img w-full h-full src="/ipad-cursor.svg" />
+        </div>
+
+        <!-- slog -->
+        <div>
+          <h2
+            my-0
+            data-cursor="text"
+            :data-cursor-style="
+              customCursorStyle({
+                background: 'currentColor',
+              })
+            "
+          >
+            iPad Cursor
+          </h2>
+          <div data-cursor="text">
+            <div>Hack iPad's mouse effect in browser,</div>
+            <div>can be used in any frameworks</div>
+          </div>
+        </div>
+      </div>
+
+      <CodeBox h-300px w-full min-w-200px max-w-500px :codes="basicCodes" />
     </div>
 
     <!-- btns -->

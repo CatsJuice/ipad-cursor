@@ -31,6 +31,7 @@
     "@highlightjs/vue-plugin": "^2.1.0",
     "@iconify-json/carbon": "^1.1.18",
     "@iconify-json/logos": "^1.1.33",
+    "@iconify-json/vscode-icons": "^1.1.25",
     "@rollup/plugin-terser": "^0.4.3",
     "@rollup/plugin-typescript": "^11.1.2",
     "@types/highlight.js": "^10.1.0",
