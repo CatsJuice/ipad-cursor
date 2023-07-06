@@ -7,3 +7,5 @@ temp
 /.aws/credentials
 .yalc
 .idea
+.vercel
+.vite-ssg-temp
