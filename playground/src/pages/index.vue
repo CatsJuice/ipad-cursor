@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import { useCursor } from "../../../src/vue/index";
+import { ref, computed } from "vue";
+
+import CodeBox from "../components/CodeBox/index.vue";
+
 import { basicCodes } from "../codes/basic";
 import { installCodes } from "../codes/install";
-import CodeBox from "../components/CodeBox/index.vue";
+import { useCursor } from "../../../src/vue/index";
+import { customBgCodes } from "../codes/custom-bg";
+import { blurEffectCodes } from "../codes/blur-effect";
+import { customBorderCodes } from "../codes/custom-border";
+import { customAnimeSpeedCodes } from "../codes/custom-anime-speed";
+
 const { CursorType, customCursorStyle, initCursor, disposeCursor } = useCursor({
   normalStyle: {
     backdropBlur: 12,
@@ -32,6 +40,20 @@ const btns = [
     }),
   },
 ];
+
+const activeBtn = ref(btns[0].label);
+
+const showCodes = computed(() => {
+  return (
+    {
+      default: basicCodes,
+      CustomBg: customBgCodes,
+      "Blur Effect": blurEffectCodes,
+      "Custom Border": customBorderCodes,
+      "Custom Anime Speed": customAnimeSpeedCodes,
+    }[activeBtn.value] || basicCodes
+  );
+});
 </script>
 
 <template>
@@ -80,24 +102,27 @@ const btns = [
       </div>
 
       <div flex="~ col items-center">
-        <CodeBox h-360px w-full min-w-200px max-w-500px :codes="basicCodes" />
-
+        <CodeBox h-360px w-full min-w-200px max-w-500px :codes="showCodes" />
         <div>
           <!-- btns -->
-          <div flex="~ gap-1 wrap" justify-center items-center pt4>
+          <div flex="~ gap-2 wrap" justify-center items-center pt4>
             <div
               :data-cursor="CursorType.BLOCK"
               class="btn"
               v-for="btn in btns"
               :key="btn.label"
               :data-cursor-style="btn.style"
+              :class="
+                activeBtn === btn.label ? ['outline'] : ['border-transparent']
+              "
+              @click="activeBtn = btn.label"
             >
               {{ btn.label }}
             </div>
           </div>
 
           <!-- actions -->
-          <div flex="~ gap-1 wrap" flex-center pt2>
+          <div flex="~ gap-1 wrap" flex-center pt10>
             <div
               :data-cursor="CursorType.BLOCK"
               class="btn"
