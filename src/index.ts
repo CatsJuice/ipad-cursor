@@ -477,6 +477,8 @@ function registerBlockNode(_node: Element) {
   function onBlockEnter() {
     const rect = node.getBoundingClientRect();
     timer && clearTimeout(timer);
+    isActive = true
+    // for some edge case, two ele very close
     timer = setTimeout(() => (isActive = true));
     const blockPadding = config.blockPadding || 0;
     let padding = blockPadding;

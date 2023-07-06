@@ -58,7 +58,7 @@ const btns = [
     </div>
 
     <!-- btns -->
-    <div flex="~ gap-1" items-center pt4>
+    <div flex="~ gap-1 wrap" justify-center items-center pt4>
       <div
         :data-cursor="CursorType.BLOCK"
         class="btn"
@@ -71,7 +71,7 @@ const btns = [
     </div>
 
     <!-- actions -->
-    <div flex="~ gap-1" items-center pt2>
+    <div flex="~ gap-1 wrap" flex-center pt2>
       <div :data-cursor="CursorType.BLOCK" class="btn" @click="disposeCursor()">
         Recover mouse
       </div>

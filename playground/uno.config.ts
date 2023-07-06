@@ -12,8 +12,9 @@ import {
 export default defineConfig({
   // ...UnoCSS options
   shortcuts: [
-    ['btn', 'px4 py1 rounded-md bg-gray/20 hover:bg-gray/30 font-500'],
-    ['icon-btn', 'p3 rounded-md']
+    ['btn', 'px4 py1 rounded-md whitespace-nowrap bg-gray/20 hover:bg-gray/30 font-500'],
+    ['icon-btn', 'p3 rounded-md'],
+    ['flex-center', 'flex items-center justify-center'],
   ],
   presets: [
     presetUno(),
