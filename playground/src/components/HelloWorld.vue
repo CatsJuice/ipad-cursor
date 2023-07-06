@@ -12,7 +12,7 @@ useCursor()
   <h1>{{ msg }}</h1>
 
   <div class="card">
-    <button data-cursor="rect" type="button" @click="count++">count is {{ count }}</button>
+    <button data-cursor="block" type="button" @click="count++">count is {{ count }}</button>
     <p data-cursor="text">
       Edit
       <code>components/HelloWorld.vue</code> to test HMR
@@ -23,14 +23,14 @@ useCursor()
     <span data-cursor="text">
       Check out
     </span>
-    <a data-cursor="rect" class="inline-block" href="https://vuejs.org/guide/quick-start.html#local" target="_blank">
+    <a data-cursor="block" class="inline-block" href="https://vuejs.org/guide/quick-start.html#local" target="_blank">
       create-vue
     </a>
     <span data-cursor="text">, the official Vue + Vite starter</span>
   </p>
   <p>
     <span data-cursor="text">Install</span>
-    <a data-cursor="rect" class="inline-block" href="https://github.com/vuejs/language-tools" target="_blank">
+    <a data-cursor="block" class="inline-block" href="https://github.com/vuejs/language-tools" target="_blank">
       Volar
     </a>
     <span data-cursor="text">

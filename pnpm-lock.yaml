@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  '@catsjuice/utils':
+    specifier: ^0.1.4
+    version: registry.npmmirror.com/@catsjuice/utils@0.1.4
+
 devDependencies:
   '@rollup/plugin-terser':
     specifier: ^0.4.3
@@ -109,6 +114,12 @@ packages:
       '@babel/helper-validator-identifier': registry.npmmirror.com/@babel/helper-validator-identifier@7.22.5
       to-fast-properties: registry.npmmirror.com/to-fast-properties@2.0.0
     dev: true
+
+  registry.npmmirror.com/@catsjuice/utils@0.1.4:
+    resolution: {integrity: sha512-A/x+9DmkanycnBq8+Q3K7CbWtm86/qmPN7mgFXCqCBl+X2GB0WVa7RV65klU5lS+DAE92nw+wpUH7wd7hTloJQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@catsjuice/utils/-/utils-0.1.4.tgz}
+    name: '@catsjuice/utils'
+    version: 0.1.4
+    dev: false
 
   registry.npmmirror.com/@esbuild/android-arm64@0.17.19:
     resolution: {integrity: sha512-KBMWvEZooR7+kzY0BtbTQn0OAYY7CsiydT63pVEaPtVYF0hXbUaOyZog37DKxK7NF3XacBJOpYT4adIJh+avxA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@esbuild/android-arm64/-/android-arm64-0.17.19.tgz}

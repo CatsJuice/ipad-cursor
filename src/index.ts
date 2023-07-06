@@ -1,81 +1,308 @@
-const position = { x: 0, y: 0 }
-const isServer = typeof document === 'undefined'
-const activeNodes = new Set<Element>()
-const eventMap = new Map()
+import { clamp, objectKeys } from "@catsjuice/utils";
 
-const config = {
-  adsorptionStrength: 10,
-  cursorClassName: 'cursor',
+// types
+export type CursorType = "normal" | "text" | "block";
+/**
+ *  if without unit, `px` is used by default
+ */
+type MaybeSize = string | number;
+/** if without unit `ms` is used by defaut */
+type MaybeDuration = string | number;
+/** do not use 0x000000, use #000000 instead */
+type MaybeColor = string;
+
+/**
+ * Configurations for the cursor
+ */
+export interface IpadCursorConfig {
+  /**
+   * Strength of adsorption, the larger the value,
+   * The higher the value, the greater the range of the block that can be moved when it is hovered
+   * @type {number} between 0 and 30
+   * @default 10
+   */
+  adsorptionStrength?: number;
+
+  /**
+   * The class name of the cursor element
+   * @type {string}
+   * @default 'cursor'
+   */
+  className?: string;
+
+  /**
+   * The style of the cursor, when it not hover on any element
+   */
+  normalStyle?: IpadCursorStyle;
+  /**
+   * The style of the cursor, when it hover on text
+   */
+  textStyle?: IpadCursorStyle;
+  /**
+   * The style of the cursor, when it hover on block
+   */
+  blockStyle?: IpadCursorStyle;
 }
-const { adsorptionStrength, cursorClassName } = config
+/**
+ * Configurable style of the cursor
+ */
+export interface IpadCursorStyle {
+  /**
+   * The width of the cursor
+   */
+  width?: MaybeSize;
+  /**
+   * The width of the cursor
+   */
+  height?: MaybeSize;
+  /**
+   * Border radius of cursor
+   */
+  radius?: MaybeSize;
 
-const normalStyle = {
-  '--cursor-width': '20px',
-  '--cursor-height': '20px',
-  '--cursor-radius': '10px',
-  '--cursor-duration': '0.23s',
-  '--cursor-position-duration': '0s',
-  '--cursor-blur-duration': '0s',
-  '--cursor-bg': 'rgba(150, 150, 150, 0.2)',
-  '--cursor-border': '1px solid rgba(100, 100, 100, 0.1)',
-  '--cursor-z-index': '9999',
-  '--cursor-font-size': '1rem',
-  '--cursor-translateX': '0px',
-  '--cursor-translateY': '0px',
-  '--cursor-scale': '1',
-  '--cursor-bg-blur': '4px',
-  '--cursor-bg-saturate': '180%',
+  /**
+   * Transition duration of basic properties like width, height, radius, border, background-color
+   */
+  durationBase?: MaybeDuration;
+  /**
+   * Transition duration of position: left, top
+   */
+  durationPosition?: MaybeDuration;
+  /**
+   * Transition duration of backdrop-filter
+   */
+  durationBackdropFilter?: MaybeDuration;
+  /**
+   * The background color of the cursor
+   */
+  background?: MaybeColor;
+  /**
+   * Border of the cursor
+   * @example '1px solid rgba(100, 100, 100, 0.1)'
+   */
+  border?: string;
+
+  /** z-index of cursor */
+  zIndex?: number;
+
+  /**
+   * Scale of cursor
+   */
+  scale?: number;
+
+  /**
+   * backdrop-filter blur
+   */
+  backdropBlur?: MaybeSize;
+
+  /**
+   * backdrop-filter saturate
+   */
+  backdropSaturate?: string;
 }
-const textStyle = {
-  '--cursor-width': '4px',
-  '--cursor-height': '1.2em',
-  '--cursor-border': '0px solid rgba(100, 100, 100, 0)',
-  '--cursor-bg': 'rgba(100, 100, 100, 0.3)',
-  '--cursor-blur-duration': '1s',
-}
-const rectStyle = {
-  '--cursor-bg': 'rgba(100, 100, 100, 0.1)',
-  '--cursor-border': '1px solid rgba(100, 100, 100, 0.05)',
-  '--cursor-bg-blur': '0px',
-  '--cursor-blur-duration': '1s',
-  '--cursor-bg-saturate': '120%',
 
-}
+let ready = false;
+let cursorEle: HTMLDivElement | null = null;
+let isActive = false;
+let styleTag: HTMLStyleElement | null = null;
+const position = { x: 0, y: 0 };
+const isServer = typeof document === "undefined";
+const registeredNodeSet = new Set<Element>();
+const eventMap = new Map<
+  Element,
+  Array<{ event: string; handler: (e: Event) => void }>
+>();
+const config = getDefaultConfig();
 
-let ready = false
-let cursor: HTMLDivElement
-let active = false
-
-function updateStyle(keyOrObj: string | Record<string, any>, value?: any) {
-  if (!cursor)
-    return
-  if (typeof keyOrObj === 'string') {
-    cursor.style.setProperty(keyOrObj, value)
+/**
+ * Util collection
+ */
+class Utils {
+  static isNum(v: string | number) {
+    return typeof v === "number" || /^\d+$/.test(v);
   }
-  else {
+  static getSize(size: MaybeSize) {
+    if (this.isNum(size)) return `${size}px`;
+    return size;
+  }
+  static getDuration(duration: MaybeDuration) {
+    if (this.isNum(duration)) return `${duration}ms`;
+    return duration;
+  }
+  static getColor(color: MaybeColor) {
+    return color;
+  }
+  static objectKeys<T extends string>(obj: Partial<Record<T, any>>): T[] {
+    return Object.keys(obj) as T[];
+  }
+  static style2Vars(style: IpadCursorStyle) {
+    const map: Record<keyof IpadCursorStyle, string> = {
+      backdropBlur: "--cursor-bg-blur",
+      backdropSaturate: "--cursor-bg-saturate",
+      background: "--cursor-bg",
+      border: "--cursor-border",
+      durationBackdropFilter: "--cursor-blur-duration",
+      durationBase: "--cursor-duration",
+      durationPosition: "--cursor-position-duration",
+      height: "--cursor-height",
+      radius: "--cursor-radius",
+      scale: "--cursor-scale",
+      width: "--cursor-width",
+      zIndex: "--cursor-z-index",
+    };
+    return this.objectKeys(style).reduce((prev, key) => {
+      let value = style[key];
+      if (value === undefined) return prev;
+
+      const maybeColor = ["background", "border"].includes(key);
+      const maybeSize = ['width', 'height', 'radius', 'backdropBlur'].includes(key);
+      const maybeDuration = key.startsWith('duration');
+
+      if (maybeColor) value = this.getColor(value as MaybeColor);
+      if (maybeSize) value = this.getSize(value as MaybeSize);
+      if (maybeDuration) value = this.getDuration(value as MaybeDuration);
+
+      const recordKey = map[key] || key;
+      return { ...prev, [recordKey]: value };
+    }, {});
+  }
+  static isMergebleObject(obj: any) {
+    const isObject = (o: any) =>
+      o && typeof o === "object" && !Array.isArray(o);
+    return isObject(obj) && Object.keys(obj).length > 0;
+  }
+  static mergeDeep<T extends any = any>(obj: T, ...sources: any[]): T {
+    if (!sources.length) return obj;
+    const source = sources.shift();
+    if (!source) return obj;
+    if (this.isMergebleObject(obj) && this.isMergebleObject(source)) {
+      objectKeys(source).forEach((key) => {
+        if (this.isMergebleObject(source[key])) {
+          if (!(obj as any)[key]) Object.assign(obj as any, { [key]: {} });
+          this.mergeDeep((obj as any)[key], source[key]);
+        } else {
+          Object.assign(obj as any, { [key]: source[key] });
+        }
+      });
+    }
+    return this.mergeDeep(obj, ...sources);
+  }
+}
+
+/**
+ * Get default config
+ * @returns
+ */
+function getDefaultConfig(): IpadCursorConfig {
+  const normalStyle: IpadCursorStyle = {
+    width: "20px",
+    height: "20px",
+    radius: "10px",
+    durationBase: "0.23s",
+    durationPosition: "0s",
+    durationBackdropFilter: "0s",
+    background: "rgba(150, 150, 150, 0.2)",
+    border: "1px solid rgba(100, 100, 100, 0.1)",
+    zIndex: 9999,
+    scale: 1,
+    backdropBlur: "0px",
+    backdropSaturate: "180%",
+  };
+  const textStyle: IpadCursorStyle = {
+    width: "4px",
+    height: "1.2em",
+    border: "0px solid rgba(100, 100, 100, 0)",
+    background: "rgba(100, 100, 100, 0.3)",
+    durationBackdropFilter: "1s",
+  };
+  const blockStyle: IpadCursorStyle = {
+    background: "rgba(100, 100, 100, 0.1)",
+    border: "1px solid rgba(100, 100, 100, 0.05)",
+    backdropBlur: "0px",
+    durationBackdropFilter: "0.1s",
+    backdropSaturate: "120%",
+  };
+  const defaultConfig: IpadCursorConfig = {
+    adsorptionStrength: 10,
+    className: "ipad-cursor",
+    normalStyle,
+    textStyle,
+    blockStyle,
+  };
+  return defaultConfig;
+}
+
+/** update cursor style (single or multiple) */
+function updateCursorStyle(
+  keyOrObj: string | Record<string, any>,
+  value?: string
+) {
+  if (!cursorEle) return;
+  if (typeof keyOrObj === "string") {
+    value && cursorEle.style.setProperty(keyOrObj, value);
+  } else {
     Object.entries(keyOrObj).forEach(([key, value]) => {
-      cursor.style.setProperty(key, value)
-    })
+      cursorEle && cursorEle.style.setProperty(key, value);
+    });
   }
 }
 
-export function init() {
-  if (isServer || ready)
-    return
-  ready = true
-  window.addEventListener('mousemove', (e) => {
-    position.x = e.clientX
-    position.y = e.clientY
-  })
-  createCursor()
-  updateCursorPosition()
+/** record mouse position */
+function recordMousePosition(e: MouseEvent) {
+  position.x = e.clientX;
+  position.y = e.clientY;
+}
 
-  const styleTag = document.createElement('style')
+/**
+ * Init cursor, hide default cursor, and listen mousemove event
+ * will only run once in client even if called multiple times
+ * @returns
+ */
+function initCursor(_config?: IpadCursorConfig) {
+  if (isServer || ready) return;
+  if (_config) updateConfig(_config);
+  ready = true;
+  window.addEventListener("mousemove", recordMousePosition);
+  createCursor();
+  createStyle();
+  updateCursorPosition();
+}
+
+/**
+ * destroy cursor, remove event listener and remove cursor element
+ * @returns
+ */
+function disposeCursor() {
+  if (!ready) return;
+  ready = false;
+  window.removeEventListener("mousemove", recordMousePosition);
+  cursorEle && cursorEle.remove();
+  styleTag && styleTag.remove();
+}
+
+/**
+ * Update current Configuration
+ * @param _config
+ */
+function updateConfig(_config: IpadCursorConfig) {
+  if ('adsorptionStrength' in _config) {
+    config.adsorptionStrength = clamp(_config.adsorptionStrength || 10, 0, 30);
+  }
+  return Utils.mergeDeep(config, _config);
+}
+
+/**
+ * Create style tag
+ * @returns
+ */
+function createStyle() {
+  if (styleTag) return;
+  styleTag = document.createElement("style");
   styleTag.innerHTML = `
     body, * {
       cursor: none;
     }
-    .${cursorClassName.split(/\s+/).join('.')} {
+    .${config.className!.split(/\s+/).join(".")} {
       pointer-events: none;
       position: fixed;
       left: var(--cursor-x);
@@ -103,8 +330,8 @@ export function init() {
         translate(calc(-50% + var(--cursor-translateX)), calc(-50% + var(--cursor-translateY))) 
         scale(var(--cursor-scale));
     }
-  `
-  document.head.appendChild(styleTag)
+  `;
+  document.head.appendChild(styleTag);
 }
 
 /**
@@ -112,12 +339,11 @@ export function init() {
  * @returns
  */
 function createCursor() {
-  if (isServer)
-    return
-  cursor = document.createElement('div')
-  cursor.classList.add(cursorClassName)
-  updateStyle(normalStyle)
-  document.body.appendChild(cursor)
+  if (isServer) return;
+  cursorEle = document.createElement("div");
+  cursorEle.classList.add(config.className!);
+  document.body.appendChild(cursorEle);
+  resetCursorStyle()
 }
 
 /**
@@ -125,134 +351,169 @@ function createCursor() {
  * @returns
  */
 function updateCursorPosition() {
-  if (isServer || !cursor)
-    return
-  if (!active) {
-    updateStyle('--cursor-x', `${position.x}px`)
-    updateStyle('--cursor-y', `${position.y}px`)
+  if (isServer || !cursorEle) return;
+  if (!isActive) {
+    updateCursorStyle("--cursor-x", `${position.x}px`);
+    updateCursorStyle("--cursor-y", `${position.y}px`);
   }
-  window.requestAnimationFrame(updateCursorPosition)
+  window.requestAnimationFrame(updateCursorPosition);
 }
 
-function queryAllNodes() {
-  if (isServer || !ready)
-    return []
-  const nodes = document.querySelectorAll('[data-cursor]')
-  return nodes
+/**
+ * get all hover targets
+ * @returns
+ */
+function queryAllTargets() {
+  if (isServer || !ready) return [];
+  const nodes = document.querySelectorAll("[data-cursor]");
+  return nodes;
 }
 
-export function register() {
-  if (isServer || !ready)
-    return
-  const nodes = queryAllNodes()
-  const nodesMap = new Map()
+/**
+ * Detect all interactive elements in the page
+ * Update the binding of events, remove listeners for elements that are removed
+ * @returns
+ */
+function updateCursor() {
+  if (isServer || !ready) return;
+  const nodes = queryAllTargets();
+  const nodesMap = new Map();
+
   nodes.forEach((node) => {
-    nodesMap.set(node, true)
-    if (activeNodes.has(node))
-      return
-    registerNode(node)
-  })
+    nodesMap.set(node, true);
+    if (registeredNodeSet.has(node)) return;
+    registerNode(node);
+  });
 
-  activeNodes.forEach((node) => {
-    if (nodesMap.has(node))
-      return
-    unregisterNode(node)
-  })
+  registeredNodeSet.forEach((node) => {
+    if (nodesMap.has(node)) return;
+    unregisterNode(node);
+  });
 }
 
 function registerNode(node: Element) {
-  const type = node.getAttribute('data-cursor')
-  activeNodes.add(node)
-  if (type === 'text')
-    registerTextNode(node)
-  if (type === 'rect')
-    registerRectNode(node)
+  const type = node.getAttribute("data-cursor") as CursorType;
+  registeredNodeSet.add(node);
+  if (type === "text") registerTextNode(node);
+  if (type === "block") registerBlockNode(node);
+  else registeredNodeSet.delete(node);
 }
 
 function unregisterNode(node: Element) {
-  activeNodes.delete(node)
+  registeredNodeSet.delete(node);
   eventMap.get(node)?.forEach(({ event, handler }: any) => {
-    node.removeEventListener(event, handler)
-  })
-  eventMap.delete(node)
+    node.removeEventListener(event, handler);
+  });
+  eventMap.delete(node);
 }
 
+/**
+ * + ---------------------- +
+ * | TextNode               |
+ * + ---------------------- +
+ */
 function registerTextNode(node: Element) {
   function onTextOver(e: Event) {
-    updateStyle(textStyle)
-    const dom = e.target as HTMLElement
-    const fontSize = window.getComputedStyle(dom).fontSize
-    updateStyle('--cursor-font-size', fontSize)
+    updateCursorStyle(Utils.style2Vars(config.textStyle || {}));
+    const dom = e.target as HTMLElement;
+    const fontSize = window.getComputedStyle(dom).fontSize;
+    updateCursorStyle("--cursor-font-size", fontSize);
   }
-  node.addEventListener('mouseover', onTextOver, { passive: true })
-  node.addEventListener('mouseleave', recoverStyle, { passive: true })
+  node.addEventListener("mouseover", onTextOver, { passive: true });
+  node.addEventListener("mouseleave", resetCursorStyle, { passive: true });
   eventMap.set(node, [
-    { event: 'mouseover', handler: onTextOver },
-    { event: 'mouseleave', handler: recoverStyle },
-  ])
+    { event: "mouseover", handler: onTextOver },
+    { event: "mouseleave", handler: resetCursorStyle },
+  ]);
 }
 
-function registerRectNode(_node: Element) {
-  const node = _node as HTMLElement
-  node.addEventListener('mouseenter', onRectEnter, { passive: true })
-  node.addEventListener('mousemove', onRectMove, { passive: true })
-  node.addEventListener('mouseleave', onRectLeave, { passive: true })
+/**
+ * + ---------------------- +
+ * | BlockNode              |
+ * + ---------------------- +
+ */
+function registerBlockNode(_node: Element) {
+  const node = _node as HTMLElement;
+  node.addEventListener("mouseenter", onBlockEnter, { passive: true });
+  node.addEventListener("mousemove", onBlockMove, { passive: true });
+  node.addEventListener("mouseleave", onBlockLeave, { passive: true });
 
-  function onRectEnter() {
-    const rect = node.getBoundingClientRect()
-    active = true
+  function onBlockEnter() {
+    const rect = node.getBoundingClientRect();
+    isActive = true;
 
-    cursor.classList.add('focus')
-    updateStyle('--cursor-position-duration', '0.1s')
-    updateStyle('--cursor-radius', '8px')
-    updateStyle('--cursor-x', `${rect.left + rect.width / 2}px`)
-    updateStyle('--cursor-y', `${rect.top + rect.height / 2}px`)
-    updateStyle('--cursor-width', `${rect.width}px`)
-    updateStyle('--cursor-height', `${rect.height}px`)
+    cursorEle!.classList.add("focus");
+    updateCursorStyle("--cursor-x", `${rect.left + rect.width / 2}px`);
+    updateCursorStyle("--cursor-y", `${rect.top + rect.height / 2}px`);
+    updateCursorStyle("--cursor-width", `${rect.width}px`);
+    updateCursorStyle("--cursor-height", `${rect.height}px`);
 
-    const styleToUpdate: any = { ...rectStyle }
-    const customStyleRaw = node.getAttribute('data-cursor-style')
+    const styleToUpdate: IpadCursorStyle = { ...(config.blockStyle || {}) };
+    const customStyleRaw = node.getAttribute("data-cursor-style");
     if (customStyleRaw) {
-      customStyleRaw.split(';').forEach((style) => {
-        const [key, value] = style.split(':').map(s => s.trim())
-        styleToUpdate[key] = value
-      })
+      customStyleRaw.split(/(,|;)/).forEach((style) => {
+        const [key, value] = style.split(":").map((s) => s.trim());
+        (styleToUpdate as any)[key] = value;
+      });
     }
 
-    updateStyle(styleToUpdate)
+    updateCursorStyle(Utils.style2Vars(styleToUpdate));
 
-    node.style.setProperty('transform', 'translate(var(--translateX), var(--translateY))')
+    node.style.setProperty(
+      "transform",
+      "translate(var(--translateX), var(--translateY))"
+    );
   }
-  function onRectMove() {
-    const rect = node.getBoundingClientRect()
-    const halfHeight = rect.height / 2
-    const topOffset = (position.y - rect.top - halfHeight) / halfHeight
-    const halfWidth = rect.width / 2
-    const leftOffset = (position.x - rect.left - halfWidth) / halfWidth
+  function onBlockMove() {
+    const rect = node.getBoundingClientRect();
+    const halfHeight = rect.height / 2;
+    const topOffset = (position.y - rect.top - halfHeight) / halfHeight;
+    const halfWidth = rect.width / 2;
+    const leftOffset = (position.x - rect.left - halfWidth) / halfWidth;
 
-    updateStyle('--cursor-translateX', `${leftOffset * (rect.width / 100 * adsorptionStrength)}px`)
-    updateStyle('--cursor-translateY', `${topOffset * (rect.height / 100 * adsorptionStrength)}px`)
+    const strength = config.adsorptionStrength || 10;
+    updateCursorStyle(
+      "--cursor-translateX",
+      `${leftOffset * ((rect.width / 100) * strength)}px`
+    );
+    updateCursorStyle(
+      "--cursor-translateY",
+      `${topOffset * ((rect.height / 100) * strength)}px`
+    );
 
-    node.style.setProperty('--translateX', `${leftOffset * (rect.width / 100 * adsorptionStrength)}px`)
-    node.style.setProperty('--translateY', `${topOffset * (rect.height / 100 * adsorptionStrength)}px`)
+    node.style.setProperty(
+      "--translateX",
+      `${leftOffset * ((rect.width / 100) * strength)}px`
+    );
+    node.style.setProperty(
+      "--translateY",
+      `${topOffset * ((rect.height / 100) * strength)}px`
+    );
   }
-  function onRectLeave() {
+  function onBlockLeave() {
     setTimeout(() => {
-      active = false
-      cursor.classList.remove('focus')
-    })
-    updateStyle(normalStyle)
-    node.style.setProperty('transform', 'translate(0px, 0px)')
+      isActive = false;
+      cursorEle && cursorEle.classList.remove("focus");
+    });
+    resetCursorStyle();
+    node.style.setProperty("transform", "translate(0px, 0px)");
   }
 
   eventMap.set(node, [
-    { event: 'mouseenter', handler: onRectEnter },
-    { event: 'mousemove', handler: onRectMove },
-    { event: 'mouseleave', handler: onRectLeave },
-  ])
+    { event: "mouseenter", handler: onBlockEnter },
+    { event: "mousemove", handler: onBlockMove },
+    { event: "mouseleave", handler: onBlockLeave },
+  ]);
 }
 
-function recoverStyle() {
-  updateStyle(normalStyle)
+function resetCursorStyle() {
+  updateCursorStyle(Utils.style2Vars(config.normalStyle || {}));
 }
 
+export { initCursor, updateCursor, disposeCursor, updateConfig };
+export default {
+  initCursor,
+  updateCursor,
+  disposeCursor,
+  updateConfig,
+};
