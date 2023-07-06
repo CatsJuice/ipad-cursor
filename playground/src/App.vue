@@ -32,7 +32,7 @@ watchEffect(() =>
 
 <template>
   <AppHeader fixed top-0 right-0 />
-  <router-view />
+  <router-view w-full px4 max-w-800px mx-auto />
 </template>
 
 <style>

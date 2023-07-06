@@ -1,28 +1,28 @@
-import { Code } from '../types/lang';
+import { UNPKG_CDN } from "../constants";
+import { Code } from "../types/lang";
 
 export const basicCodes: Code[] = [
   {
     lang: "html",
-    code: `// index.html
+    code: `
 <body>
   <div>
-  <span data-cursor="text">
-    will be text
-  </span>
-  <button data-cursor="block">
-    Button
-  </button>
+    <span data-cursor="text">
+      will be text
+    </span>
+    <button data-cursor="block">
+      Button
+    </button>
   </div>
 
   <script type="module">
-    import { initCursor } from "https://unpkg.com/ipad-cursor@latest/index.mjs";
+    import { initCursor } from "${UNPKG_CDN}";
     initCursor();
   </script>
-</body>;
-    `
+</body>`,
   },
   {
-    lang: 'vue',
+    lang: "vue",
     code: `<script setup>
 import { useCursor } from "ipad-cursor/vue";
 
@@ -38,7 +38,6 @@ useCursor()
       Button
     </button>
   </div>
-</template>
-    `
-  }
-]
+</template>`,
+  },
+];
