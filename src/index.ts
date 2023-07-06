@@ -1,7 +1,7 @@
 import { clamp, objectKeys } from "@catsjuice/utils";
 
 // types
-export type CursorType = "normal" | "text" | "block";
+export type ICursorType = "normal" | "text" | "block";
 /**
  *  if without unit, `px` is used by default
  */
@@ -42,6 +42,10 @@ export interface IpadCursorConfig {
    * The style of the cursor, when it hover on block
    */
   blockStyle?: IpadCursorStyle;
+  /**
+   * Cursor padding when hover on block
+   */
+  blockPadding?: number | "auto";
 }
 /**
  * Configurable style of the cursor
@@ -155,8 +159,10 @@ class Utils {
       if (value === undefined) return prev;
 
       const maybeColor = ["background", "border"].includes(key);
-      const maybeSize = ['width', 'height', 'radius', 'backdropBlur'].includes(key);
-      const maybeDuration = key.startsWith('duration');
+      const maybeSize = ["width", "height", "radius", "backdropBlur"].includes(
+        key
+      );
+      const maybeDuration = key.startsWith("duration");
 
       if (maybeColor) value = this.getColor(value as MaybeColor);
       if (maybeSize) value = this.getSize(value as MaybeSize);
@@ -197,7 +203,7 @@ function getDefaultConfig(): IpadCursorConfig {
   const normalStyle: IpadCursorStyle = {
     width: "20px",
     height: "20px",
-    radius: "10px",
+    radius: "50%",
     durationBase: "0.23s",
     durationPosition: "0s",
     durationBackdropFilter: "0s",
@@ -214,6 +220,7 @@ function getDefaultConfig(): IpadCursorConfig {
     border: "0px solid rgba(100, 100, 100, 0)",
     background: "rgba(100, 100, 100, 0.3)",
     durationBackdropFilter: "1s",
+    radius: "10px",
   };
   const blockStyle: IpadCursorStyle = {
     background: "rgba(100, 100, 100, 0.1)",
@@ -221,8 +228,10 @@ function getDefaultConfig(): IpadCursorConfig {
     backdropBlur: "0px",
     durationBackdropFilter: "0.1s",
     backdropSaturate: "120%",
+    radius: "10px",
   };
   const defaultConfig: IpadCursorConfig = {
+    blockPadding: "auto",
     adsorptionStrength: 10,
     className: "ipad-cursor",
     normalStyle,
@@ -285,7 +294,7 @@ function disposeCursor() {
  * @param _config
  */
 function updateConfig(_config: IpadCursorConfig) {
-  if ('adsorptionStrength' in _config) {
+  if ("adsorptionStrength" in _config) {
     config.adsorptionStrength = clamp(_config.adsorptionStrength || 10, 0, 30);
   }
   return Utils.mergeDeep(config, _config);
@@ -343,7 +352,7 @@ function createCursor() {
   cursorEle = document.createElement("div");
   cursorEle.classList.add(config.className!);
   document.body.appendChild(cursorEle);
-  resetCursorStyle()
+  resetCursorStyle();
 }
 
 /**
@@ -392,7 +401,7 @@ function updateCursor() {
 }
 
 function registerNode(node: Element) {
-  const type = node.getAttribute("data-cursor") as CursorType;
+  const type = node.getAttribute("data-cursor") as ICursorType;
   registeredNodeSet.add(node);
   if (type === "text") registerTextNode(node);
   if (type === "block") registerBlockNode(node);
@@ -407,6 +416,18 @@ function unregisterNode(node: Element) {
   eventMap.delete(node);
 }
 
+function extractCustomStyle(node: Element) {
+  const customStyleRaw = node.getAttribute("data-cursor-style");
+  const styleObj: Record<string, any> = {};
+  if (customStyleRaw) {
+    customStyleRaw.split(/(,|;)/).forEach((style) => {
+      const [key, value] = style.split(":").map((s) => s.trim());
+      styleObj[key] = value;
+    });
+  }
+  return styleObj;
+}
+
 /**
  * + ---------------------- +
  * | TextNode               |
@@ -418,6 +439,12 @@ function registerTextNode(node: Element) {
     const dom = e.target as HTMLElement;
     const fontSize = window.getComputedStyle(dom).fontSize;
     updateCursorStyle("--cursor-font-size", fontSize);
+    updateCursorStyle(
+      Utils.style2Vars({
+        ...config.textStyle,
+        ...extractCustomStyle(dom),
+      })
+    );
   }
   node.addEventListener("mouseover", onTextOver, { passive: true });
   node.addEventListener("mouseleave", resetCursorStyle, { passive: true });
@@ -441,21 +468,23 @@ function registerBlockNode(_node: Element) {
   function onBlockEnter() {
     const rect = node.getBoundingClientRect();
     isActive = true;
+    const blockPadding = config.blockPadding || 0;
+    let padding = blockPadding;
+    if (padding === "auto") {
+      const size = Math.max(rect.width, rect.height);
+      padding = Math.max(2, Math.floor(size / 25));
+    }
 
     cursorEle!.classList.add("focus");
     updateCursorStyle("--cursor-x", `${rect.left + rect.width / 2}px`);
     updateCursorStyle("--cursor-y", `${rect.top + rect.height / 2}px`);
-    updateCursorStyle("--cursor-width", `${rect.width}px`);
-    updateCursorStyle("--cursor-height", `${rect.height}px`);
+    updateCursorStyle("--cursor-width", `${rect.width + padding * 2}px`);
+    updateCursorStyle("--cursor-height", `${rect.height + padding * 2}px`);
 
-    const styleToUpdate: IpadCursorStyle = { ...(config.blockStyle || {}) };
-    const customStyleRaw = node.getAttribute("data-cursor-style");
-    if (customStyleRaw) {
-      customStyleRaw.split(/(,|;)/).forEach((style) => {
-        const [key, value] = style.split(":").map((s) => s.trim());
-        (styleToUpdate as any)[key] = value;
-      });
-    }
+    const styleToUpdate: IpadCursorStyle = {
+      ...(config.blockStyle || {}),
+      ...extractCustomStyle(node),
+    };
 
     updateCursorStyle(Utils.style2Vars(styleToUpdate));
 
@@ -510,10 +539,34 @@ function resetCursorStyle() {
   updateCursorStyle(Utils.style2Vars(config.normalStyle || {}));
 }
 
-export { initCursor, updateCursor, disposeCursor, updateConfig };
-export default {
+/**
+ * Create custom style that can be bound to `data-cursor-style`
+ * @param style
+ */
+function customCursorStyle(style: IpadCursorStyle & Record<string, any>) {
+  return Object.entries(style)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join("; ");
+}
+const CursorType = {
+  TEXT: "text" as ICursorType,
+  BLOCK: "block" as ICursorType,
+};
+
+const exported = {
+  CursorType,
   initCursor,
   updateCursor,
   disposeCursor,
   updateConfig,
+  customCursorStyle,
 };
+export {
+  CursorType,
+  initCursor,
+  updateCursor,
+  disposeCursor,
+  updateConfig,
+  customCursorStyle,
+};
+export default exported;
