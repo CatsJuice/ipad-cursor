@@ -25,6 +25,7 @@ export function useCursor(config?: IpadCursorConfig) {
     disposeCursor,
     initCursor,
     updateCursor,
+    updateConfig,
     customCursorStyle,
   };
 }

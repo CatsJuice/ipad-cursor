@@ -1,46 +1,63 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
-import { useCursor } from "../../src/vue/index";
+import AppHeader from "./components/AppHeader.vue";
+import Home from "./components/Home.vue";
+import { useCursor } from '../../src/vue/index';
+import { watchEffect } from "vue";
+import { useDark } from '@vueuse/core';
 
-useCursor({
-  normalStyle: {
-    backdropBlur: 12,
-    backdropSaturate: "200%",
-  },
-  textStyle: {
-    background: "red",
-  },
-});
+const isDark = useDark()
+const { updateConfig } = useCursor();
+
+watchEffect(() => updateConfig({
+  blockStyle: {
+    border: `1px solid ${isDark.value ? '#ffffff80' : '#00000020'}`
+  }
+}))
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img data-cursor="block" src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img
-        data-cursor="block"
-        src="./assets/vue.svg"
-        class="logo vue"
-        alt="Vue logo"
-      />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <AppHeader fixed top-0 right-0 />
+  <Home />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<style>
+* {
+  box-sizing: border-box;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+a,
+a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+html {
+  --dark: #222;
+  --light: #fff;
+  --dark30: rgba(0, 0, 0, 0.3);
+  --light30: rgba(255, 255, 255, 0.3);
+  --bg: var(--light);
+  --front: var(--dark);
+
+  background-color: var(--bg) !important;
+  color: var(--front) !important;
+}
+html.dark {
+  --bg: var(--dark);
+  --front: var(--light);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
 }
 </style>
