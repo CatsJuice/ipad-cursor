@@ -1,17 +1,30 @@
-import { onMounted, onBeforeUnmount } from 'vue'
-import { initCursor, updateCursor, disposeCursor, IpadCursorConfig, updateConfig } from '..'
-
+import { onMounted, onBeforeUnmount } from "vue";
+import {
+  CursorType,
+  initCursor,
+  updateCursor,
+  disposeCursor,
+  IpadCursorConfig,
+  updateConfig,
+  customCursorStyle,
+} from "..";
 
 export const ipadCursorPlugin = {
   install(app: any) {
-    app.directive('cursor', {})
+    app.directive("cursor", {});
   },
-}
+};
 
 export function useCursor(config?: IpadCursorConfig) {
-  onMounted(() => updateCursor())
-  onBeforeUnmount(() => updateCursor())
+  onMounted(() => updateCursor());
+  onBeforeUnmount(() => updateCursor());
   config && updateConfig(config);
-  initCursor()
-  return { disposeCursor, initCursor, updateCursor }
+  initCursor();
+  return {
+    CursorType,
+    disposeCursor,
+    initCursor,
+    updateCursor,
+    customCursorStyle,
+  };
 }
