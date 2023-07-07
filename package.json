@@ -25,7 +25,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@formkit/auto-animate": "^0.7.0",
     "@highlightjs/vue-plugin": "^2.1.0",
