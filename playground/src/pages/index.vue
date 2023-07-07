@@ -84,7 +84,6 @@ const showCodes = computed(() => {
           <h2
             my-0
             mt-2
-            data-cursor="text"
             :data-cursor-style="
               customCursorStyle({
                 background: 'currentColor',
@@ -93,7 +92,7 @@ const showCodes = computed(() => {
           >
             iPad Cursor
           </h2>
-          <div data-cursor="text" opacity-70>
+          <div opacity-70>
             <div>Hack iPad's mouse effect in browser,</div>
             <div>can be used in any frameworks</div>
           </div>

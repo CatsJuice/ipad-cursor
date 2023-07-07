@@ -89,7 +89,6 @@ function onCopy(e: MouseEvent) {
       rounded-2
     >
       <highlightjs
-        data-cursor="text"
         :key="activeCode.lang"
         :language="activeCode.lang"
         :code="activeCode.code"

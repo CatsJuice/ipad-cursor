@@ -7,7 +7,7 @@ export const customBorderCodes: Code[] = [
     code: `
 <body>
   <div>
-    <span data-cursor="text">
+    <span>
       will be text
     </span>
     <button 
@@ -37,7 +37,7 @@ const style = customCursorStyle({
     
 <template>
   <div>
-    <span data-cursor="text">
+    <span>
       will be text
     </span>
     <button data-cursor="block" :data-cursor-style="style">

@@ -386,8 +386,22 @@ function updateCursorPosition() {
  */
 function queryAllTargets() {
   if (isServer || !ready) return [];
-  const nodes = document.querySelectorAll("[data-cursor]");
-  return nodes;
+  return document.querySelectorAll("[data-cursor]");
+}
+
+
+function addDataCursorText(nodes: NodeListOf<ChildNode>) {
+  nodes.forEach((node) => {
+    if (node.nodeType === 3 && node.textContent?.trim() !== '') {
+      const parent = node.parentNode as HTMLElement // TODO: use isText Type assertion functions
+      parent.setAttribute('data-cursor', 'text')
+    }
+    if (node.nodeType === 1) {
+      const nodeEle = node as HTMLElement // TODO: use isElement Type assertion functions
+      if (nodeEle.getAttribute('data-cursor') === 'block') return
+      addDataCursorText(node.childNodes)
+    }
+  })
 }
 
 /**
@@ -397,9 +411,9 @@ function queryAllTargets() {
  */
 function updateCursor() {
   if (isServer || !ready) return;
-  const nodes = queryAllTargets();
   const nodesMap = new Map();
-
+  addDataCursorText(document.body.childNodes)
+  const nodes = queryAllTargets();
   nodes.forEach((node) => {
     nodesMap.set(node, true);
     if (registeredNodeSet.has(node)) return;
@@ -413,7 +427,7 @@ function updateCursor() {
 }
 
 function registerNode(node: Element) {
-  const type = node.getAttribute("data-cursor") as ICursorType;
+  let type = node.getAttribute("data-cursor") as ICursorType;
   registeredNodeSet.add(node);
   if (type === "text") registerTextNode(node);
   if (type === "block") registerBlockNode(node);
@@ -558,11 +572,11 @@ function registerBlockNode(_node: Element) {
   function toggleNodeTransition(enable?: boolean) {
     const duration = enable
       ? Utils.getDuration(
-          config?.blockStyle?.durationPosition ??
-            config?.blockStyle?.durationBase ??
-            config?.normalStyle?.durationBase ??
-            "0.23s"
-        )
+        config?.blockStyle?.durationPosition ??
+        config?.blockStyle?.durationBase ??
+        config?.normalStyle?.durationBase ??
+        "0.23s"
+      )
       : "";
     node.style.setProperty(
       "transition",
