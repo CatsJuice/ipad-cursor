@@ -1,6 +1,6 @@
 <!-- Logo -->
 <p align="center">
-  <img src="./playground/public/ipad-cursor.svg"/>
+  <img src="https://cursor.oooo.so/ipad-cursor.svg"/>
 </p>
 
 <!-- Bridge -->
