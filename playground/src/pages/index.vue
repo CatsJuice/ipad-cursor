@@ -34,7 +34,7 @@ const btns = [
     }),
   },
   {
-    label: "Custom Anime Speed",
+    label: "Custom Animation Speed",
     style: customCursorStyle({
       durationBase: 2000,
     }),
@@ -50,7 +50,7 @@ const showCodes = computed(() => {
       CustomBg: customBgCodes,
       "Blur Effect": blurEffectCodes,
       "Custom Border": customBorderCodes,
-      "Custom Anime Speed": customAnimeSpeedCodes,
+      "Custom Animation Speed": customAnimeSpeedCodes,
     }[activeBtn.value] || basicCodes
   );
 });
