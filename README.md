@@ -1,12 +1,28 @@
-![logo](./playground/public/ipad-cursor.svg)
+<!-- Logo -->
+<p align="center">
+  <img src="./playground/public/ipad-cursor.svg"/>
+</p>
 
-# ipad-mouse
+<!-- Bridge -->
+<h1 align="center">ipad-mouse </h1>
+<!-- Description -->
+<h2 align="center">
+  Mouse effect hacking of iPad in browser that can be used in any frameworks 
+</h2>
+<p align="center">
+  <img src="https://img.shields.io/npm/l/ipad-cursor"/>
+  <img src="https://img.shields.io/bundlephobia/min/ipad-cursor"/>
+  <img src="https://img.shields.io/npm/v/ipad-cursor"/>
+</p>
 
-![NPM](https://img.shields.io/npm/l/ipad-cursor)
-![NPM bundle size](https://img.shields.io/bundlephobia/min/ipad-cursor)
-![npm](https://img.shields.io/npm/v/ipad-cursor)
+<p align="center">
+  <a href="./docs/README.zh.md"> 
+      <img src="https://img.shields.io/badge/language_%E4%B8%AD%E6%96%87-bule"/>
+  </a>
+</p>
 
-Mouse effect hacking of iPad in browser that can be used in any frameworks 
+---
+
 
 
 ## Install
@@ -183,7 +199,7 @@ export interface IpadCursorStyle {
 
 ## Roadmap
 
-- [ ] Add Chinese document
+- [x] Add Chinese document
 - [ ] API Docs
 - [ ] More examples
 - [ ] Auto detect dom update, and call `updateCursor` automatically
