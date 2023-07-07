@@ -32,7 +32,7 @@ watchEffect(() =>
 
 <template>
   <AppHeader fixed top-0 right-0 />
-  <router-view w-full px4 max-w-800px mx-auto />
+  <router-view w-full px4 max-w-960px mx-auto />
 </template>
 
 <style>
@@ -69,9 +69,6 @@ html.dark {
 }
 
 #app {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   min-height: 100%;
 }
 </style>

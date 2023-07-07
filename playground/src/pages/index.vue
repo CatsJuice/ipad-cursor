@@ -57,12 +57,13 @@ const showCodes = computed(() => {
 </script>
 
 <template>
-  <div flex="~ col" justify-center items-center gap-2>
-    <div flex="~ col gap-10" md:flex="~ row" gap-1 items-start justify-between>
+  <div  flex="~ col" items-center h-auto md:h-full md:justify-center py-100px md:py0>
+    <div w-full flex="~ col" md:flex="~ row" gap-10 items-center md:justify-between md:items-start>
+      <!-- logo, info -->
       <div
-        flex="~ row gap-4"
-        h-200px
-        md:flex="~ col"
+        flex="~ col gap-4"
+        items-center
+        md:items-start
         md:h-360px
         items-start
         justify-between
@@ -77,9 +78,9 @@ const showCodes = computed(() => {
         >
           <img w-full h-full src="/ipad-cursor.svg" />
         </div>
-
+  
         <!-- slog -->
-        <div flex="~ col items-start">
+        <div flex="~ col" items-center text-center md:items-start md:text-left>
           <h2
             my-0
             mt-2
@@ -96,12 +97,13 @@ const showCodes = computed(() => {
             <div>Hack iPad's mouse effect in browser,</div>
             <div>can be used in any frameworks</div>
           </div>
-
+  
           <CodeBox mt6 w-full :codes="installCodes" />
         </div>
       </div>
-
-      <div flex="~ col items-center">
+  
+      <!-- demo -->
+      <div w-full md:w0 md:flex-1 flex="~ col items-center">
         <CodeBox h-360px w-full min-w-200px max-w-500px :codes="showCodes" />
         <div>
           <!-- btns -->
@@ -120,7 +122,7 @@ const showCodes = computed(() => {
               {{ btn.label }}
             </div>
           </div>
-
+  
           <!-- actions -->
           <div flex="~ gap-1 wrap" flex-center pt10>
             <div
@@ -130,7 +132,7 @@ const showCodes = computed(() => {
             >
               Recover mouse
             </div>
-
+  
             <div
               :data-cursor="CursorType.BLOCK"
               class="btn"
