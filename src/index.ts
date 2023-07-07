@@ -130,9 +130,9 @@ class Utils {
     if (this.isNum(size)) return `${size}px`;
     return size;
   }
-  static getDuration(duration: MaybeDuration) {
+  static getDuration(duration: MaybeDuration): string {
     if (this.isNum(duration)) return `${duration}ms`;
-    return duration;
+    return `${duration}`;
   }
   static getColor(color: MaybeColor) {
     return color;
@@ -227,6 +227,7 @@ function getDefaultConfig(): IpadCursorConfig {
     background: "rgba(100, 100, 100, 0.1)",
     border: "1px solid rgba(100, 100, 100, 0.05)",
     backdropBlur: "0px",
+    durationBase: "0.23s",
     durationBackdropFilter: "0.1s",
     backdropSaturate: "120%",
     radius: "10px",
@@ -302,7 +303,11 @@ function disposeCursor() {
  */
 function updateConfig(_config: IpadCursorConfig) {
   if ("adsorptionStrength" in _config) {
-    config.adsorptionStrength = Utils.clamp(_config.adsorptionStrength || 10, 0, 30);
+    config.adsorptionStrength = Utils.clamp(
+      _config.adsorptionStrength || 10,
+      0,
+      30
+    );
   }
   return Utils.mergeDeep(config, _config);
 }
@@ -478,7 +483,7 @@ function registerBlockNode(_node: Element) {
   function onBlockEnter() {
     const rect = node.getBoundingClientRect();
     timer && clearTimeout(timer);
-    isActive = true
+    isActive = true;
     // for some edge case, two ele very close
     timer = setTimeout(() => (isActive = true));
     const blockPadding = config.blockPadding || 0;
@@ -499,8 +504,14 @@ function registerBlockNode(_node: Element) {
       ...extractCustomStyle(node),
     };
 
+    if (styleToUpdate.durationPosition === undefined) {
+      styleToUpdate.durationPosition =
+        styleToUpdate.durationBase ?? config.normalStyle?.durationBase;
+    }
+
     updateCursorStyle(Utils.style2Vars(styleToUpdate));
 
+    toggleNodeTransition(true);
     node.style.setProperty(
       "transform",
       "translate(var(--translateX), var(--translateY))"
@@ -523,6 +534,7 @@ function registerBlockNode(_node: Element) {
       `${topOffset * ((rect.height / 100) * strength)}px`
     );
 
+    toggleNodeTransition(false);
     node.style.setProperty(
       "--translateX",
       `${leftOffset * ((rect.width / 100) * strength)}px`
@@ -539,7 +551,23 @@ function registerBlockNode(_node: Element) {
       cursorEle && cursorEle.classList.remove("focus");
     });
     resetCursorStyle();
+    toggleNodeTransition(true);
     node.style.setProperty("transform", "translate(0px, 0px)");
+  }
+
+  function toggleNodeTransition(enable?: boolean) {
+    const duration = enable
+      ? Utils.getDuration(
+          config?.blockStyle?.durationPosition ??
+            config?.blockStyle?.durationBase ??
+            config?.normalStyle?.durationBase ??
+            "0.23s"
+        )
+      : "";
+    node.style.setProperty(
+      "transition",
+      duration ? `all ${duration} cubic-bezier(.58,.09,.46,1.46)` : "none"
+    );
   }
 
   eventMap.set(node, [
