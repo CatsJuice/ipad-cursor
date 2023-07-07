@@ -14,6 +14,7 @@ export default defineConfig({
   shortcuts: [
     ['btn', 'px4 py1 rounded-md whitespace-nowrap bg-gray/20 hover:bg-gray/30 font-500'],
     ['icon-btn', 'p3 rounded-md'],
+    ['full', 'w-full h-full'],
     ['flex-center', 'flex items-center justify-center'],
   ],
   presets: [
