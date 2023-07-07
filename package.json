@@ -1,6 +1,6 @@
 {
   "name": "ipad-cursor",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Mouse effect of iPad in browser that can be used in any framework",
   "scripts": {
     "dev": "cd ./playground && vite",
@@ -23,7 +23,14 @@
       "default": "./index.mjs"
     }
   },
-  "keywords": ["iPad Cursor", "Mouse Effect", "Vue", "iPad", "Mouse", "Cursor"],
+  "keywords": [
+    "iPad Cursor",
+    "Mouse Effect",
+    "Vue",
+    "iPad",
+    "Mouse",
+    "Cursor"
+  ],
   "author": "CatsJuice<https://github.com/CatsJuice>",
   "repository": "https://github.com/catsjuice/ipad-cursor/",
   "license": "MIT",
