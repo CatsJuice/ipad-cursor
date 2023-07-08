@@ -61,7 +61,7 @@
   <div data-cursor="block">Block Cursor</div>
   ```
 
-  After your dom loaded, call `initCursor` to start the effect. You may need to call `initCursor` when dom updated.
+  After your dom loaded, call `initCursor` to start the effect. You may need to call `updateCursor()` when dom updated.
 
   ```js
   import { initCursor } from 'ipad-cursor'

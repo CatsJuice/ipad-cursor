@@ -61,7 +61,7 @@
   <div data-cursor="block">块状光标</div>
   ```
 
-  在你的dom加载后，调用 `initCursor` 来启动效果。当dom更新时，你可能需要调用 `initCursor`。
+  在你的dom加载后，调用 `initCursor` 来启动效果。当dom更新时，你可能需要调用 `updateCursor()`。
 
   ```js
   import { initCursor } from 'ipad-cursor'
