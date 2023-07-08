@@ -44,6 +44,10 @@ export interface IpadCursorConfig {
      * detect text node and apply text cursor automatically
      **/
     enableAutoTextCursor?: boolean;
+    /**
+     * whether to enable lighting effect
+     */
+    enableLighting?: boolean;
 }
 /**
  * Configurable style of the cursor

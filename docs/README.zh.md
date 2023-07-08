@@ -150,6 +150,7 @@
 | `className`                       | `string`          | `'ipad-cursor'`      | 光标的css类名                                                                      | No       |
 | `blockPadding`                    | `number`          | `auto`               | 当光标聚焦在 `block` 时的内边距，设置为 `auto` 将自动计算                          | No       |
 | `enableAutoTextCursor`(`v0.2.0+`) | `boolean`         | `false`              | 自动检测 `text` 类型的光标 [#12](https://github.com/CatsJuice/ipad-cursor/pull/12) | No       |
+| `enableLighting`(`v0.3.0+`)       | `boolean`         | `false`              | 给 `block` 增加光照效果 [#14](https://github.com/CatsJuice/ipad-cursor/pull/14)    | No       |
 | `normalStyle`                     | `IpadCursorStyle` | 请查看 [样式](#样式) | 正常情况下的光标样式, see [Style](#style)                                          | No       |
 | `textStyle`                       | `IpadCursorStyle` | 请查看 [样式](#样式) | 文字模式下的光标样式, see [Style](#style)                                          | No       |
 | `blockStyle`                      | `IpadCursorStyle` | 请查看 [样式](#样式) | 块元素下的光标样式, see [Style](#style)                                            | No       |
