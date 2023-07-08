@@ -289,16 +289,16 @@ function autoApplyTextCursor(target: HTMLElement) {
   resetCursorStyle();
 }
 
-const mouseLeaveEvent = new MouseEvent('mouseleave', {
-  bubbles: true,
-  cancelable: true,
-  view: window,
-});
 
 let lastNode: Element | null = null;
 const scrollHandler = () => {
   const currentNode = document.elementFromPoint(position.x, position.y);
-  if (currentNode !== lastNode && lastNode) {
+  const mouseLeaveEvent = new MouseEvent('mouseleave', {
+    bubbles: true,
+    cancelable: true,
+    view: window,
+  });
+  if (currentNode !== lastNode && lastNode && mouseLeaveEvent) {
     lastNode.dispatchEvent(mouseLeaveEvent);
   }
   lastNode = currentNode;
@@ -604,11 +604,11 @@ function registerBlockNode(_node: Element) {
   function toggleNodeTransition(enable?: boolean) {
     const duration = enable
       ? Utils.getDuration(
-          config?.blockStyle?.durationPosition ??
-            config?.blockStyle?.durationBase ??
-            config?.normalStyle?.durationBase ??
-            "0.23s"
-        )
+        config?.blockStyle?.durationPosition ??
+        config?.blockStyle?.durationBase ??
+        config?.normalStyle?.durationBase ??
+        "0.23s"
+      )
       : "";
     node.style.setProperty(
       "transition",

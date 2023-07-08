@@ -40,6 +40,10 @@ export interface IpadCursorConfig {
      * Cursor padding when hover on block
      */
     blockPadding?: number | "auto";
+    /**
+     * detect text node and apply text cursor automatically
+     **/
+    enableAutoTextCursor?: boolean;
 }
 /**
  * Configurable style of the cursor
