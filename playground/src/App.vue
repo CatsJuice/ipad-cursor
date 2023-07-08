@@ -8,6 +8,7 @@ import { useHead } from "@unhead/vue";
 const isDark = useDark();
 const { updateConfig } = useCursor({
   enableAutoTextCursor: true,
+  enableLighting: true,
 });
 
 const appName = "ipad-cursor";
