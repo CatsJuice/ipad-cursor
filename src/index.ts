@@ -44,6 +44,11 @@ export interface IpadCursorConfig {
    * Cursor padding when hover on block
    */
   blockPadding?: number | "auto";
+
+  /**
+   * detect text node and apply text cursor automatically
+   **/
+  enableAutoTextCursor?: boolean;
 }
 /**
  * Configurable style of the cursor
@@ -105,7 +110,8 @@ export interface IpadCursorStyle {
 
 let ready = false;
 let cursorEle: HTMLDivElement | null = null;
-let isActive = false;
+let isBlockActive = false;
+let isTextActive = false;
 let styleTag: HTMLStyleElement | null = null;
 const position = { x: 0, y: 0 };
 const isServer = typeof document === "undefined";
@@ -259,9 +265,28 @@ function updateCursorStyle(
 }
 
 /** record mouse position */
-function recordMousePosition(e: MouseEvent) {
+function onMousemove(e: MouseEvent) {
   position.x = e.clientX;
   position.y = e.clientY;
+  autoApplyTextCursor(e.target as HTMLElement);
+}
+
+/**
+ * Automatically apply cursor style when hover on target
+ * @param target
+ * @returns
+ */
+function autoApplyTextCursor(target: HTMLElement) {
+  if (isBlockActive || isTextActive || !config.enableAutoTextCursor) return;
+  if (target && target.childNodes.length === 1) {
+    const child = target.childNodes[0] as HTMLElement;
+    if (child.nodeType === 3 && child.textContent?.trim() !== "") {
+      target.setAttribute("data-cursor", "text");
+      applyTextCursor(target);
+      return;
+    }
+  }
+  resetCursorStyle();
 }
 
 const mouseLeaveEvent = new MouseEvent('mouseleave', {
@@ -289,7 +314,7 @@ function initCursor(_config?: IpadCursorConfig) {
   if (isServer || ready) return;
   if (_config) updateConfig(_config);
   ready = true;
-  window.addEventListener("mousemove", recordMousePosition);
+  window.addEventListener("mousemove", onMousemove);
   window.addEventListener("scroll", scrollHandler);
   createCursor();
   createStyle();
@@ -304,7 +329,7 @@ function initCursor(_config?: IpadCursorConfig) {
 function disposeCursor() {
   if (!ready) return;
   ready = false;
-  window.removeEventListener("mousemove", recordMousePosition);
+  window.removeEventListener("mousemove", onMousemove);
   window.removeEventListener("scroll", scrollHandler);
   cursorEle && cursorEle.remove();
   styleTag && styleTag.remove();
@@ -391,7 +416,7 @@ function createCursor() {
  */
 function updateCursorPosition() {
   if (isServer || !cursorEle) return;
-  if (!isActive) {
+  if (!isBlockActive) {
     updateCursorStyle("--cursor-x", `${position.x}px`);
     updateCursorStyle("--cursor-y", `${position.y}px`);
   }
@@ -404,8 +429,7 @@ function updateCursorPosition() {
  */
 function queryAllTargets() {
   if (isServer || !ready) return [];
-  const nodes = document.querySelectorAll("[data-cursor]");
-  return nodes;
+  return document.querySelectorAll("[data-cursor]");
 }
 
 /**
@@ -415,9 +439,9 @@ function queryAllTargets() {
  */
 function updateCursor() {
   if (isServer || !ready) return;
-  const nodes = queryAllTargets();
   const nodesMap = new Map();
-
+  // addDataCursorText(document.body.childNodes)
+  const nodes = queryAllTargets();
   nodes.forEach((node) => {
     nodesMap.set(node, true);
     if (registeredNodeSet.has(node)) return;
@@ -431,7 +455,7 @@ function updateCursor() {
 }
 
 function registerNode(node: Element) {
-  const type = node.getAttribute("data-cursor") as ICursorType;
+  let type = node.getAttribute("data-cursor") as ICursorType;
   registeredNodeSet.add(node);
   if (type === "text") registerTextNode(node);
   if (type === "block") registerBlockNode(node);
@@ -465,20 +489,21 @@ function extractCustomStyle(node: Element) {
  * + ---------------------- +
  */
 function registerTextNode(node: Element) {
+  let timer: any;
   function onTextOver(e: Event) {
-    updateCursorStyle(Utils.style2Vars(config.textStyle || {}));
-    const dom = e.target as HTMLElement;
-    const fontSize = window.getComputedStyle(dom).fontSize;
-    updateCursorStyle("--cursor-font-size", fontSize);
-    updateCursorStyle(
-      Utils.style2Vars({
-        ...config.textStyle,
-        ...extractCustomStyle(dom),
-      })
-    );
+    timer && clearTimeout(timer);
+    isTextActive = true;
+    // for some edge case, two ele very close
+    timer = setTimeout(() => (isTextActive = true));
+    applyTextCursor(e.target as HTMLElement);
+  }
+  function onTextLeave() {
+    timer && clearTimeout(timer);
+    timer = setTimeout(() => (isTextActive = false));
+    resetCursorStyle();
   }
   node.addEventListener("mouseover", onTextOver, { passive: true });
-  node.addEventListener("mouseleave", resetCursorStyle, { passive: true });
+  node.addEventListener("mouseleave", onTextLeave, { passive: true });
   eventMap.set(node, [
     { event: "mouseover", handler: onTextOver },
     { event: "mouseleave", handler: resetCursorStyle },
@@ -501,9 +526,9 @@ function registerBlockNode(_node: Element) {
   function onBlockEnter() {
     const rect = node.getBoundingClientRect();
     timer && clearTimeout(timer);
-    isActive = true;
+    isBlockActive = true;
     // for some edge case, two ele very close
-    timer = setTimeout(() => (isActive = true));
+    timer = setTimeout(() => (isBlockActive = true));
     const blockPadding = config.blockPadding || 0;
     let padding = blockPadding;
     if (padding === "auto") {
@@ -536,7 +561,7 @@ function registerBlockNode(_node: Element) {
     );
   }
   function onBlockMove() {
-    if (!isActive) {
+    if (!isBlockActive) {
       onBlockEnter();
     }
     const rect = node.getBoundingClientRect();
@@ -568,7 +593,7 @@ function registerBlockNode(_node: Element) {
   function onBlockLeave() {
     timer && clearTimeout(timer);
     timer = setTimeout(() => {
-      isActive = false;
+      isBlockActive = false;
       cursorEle && cursorEle.classList.remove("focus");
     });
     resetCursorStyle();
@@ -600,6 +625,18 @@ function registerBlockNode(_node: Element) {
 
 function resetCursorStyle() {
   updateCursorStyle(Utils.style2Vars(config.normalStyle || {}));
+}
+
+function applyTextCursor(sourceNode: HTMLElement) {
+  updateCursorStyle(Utils.style2Vars(config.textStyle || {}));
+  const fontSize = window.getComputedStyle(sourceNode).fontSize;
+  updateCursorStyle("--cursor-font-size", fontSize);
+  updateCursorStyle(
+    Utils.style2Vars({
+      ...config.textStyle,
+      ...extractCustomStyle(sourceNode),
+    })
+  );
 }
 
 /**

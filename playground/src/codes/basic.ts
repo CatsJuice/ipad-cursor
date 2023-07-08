@@ -7,7 +7,7 @@ export const basicCodes: Code[] = [
     code: `
 <body>
   <div>
-    <span data-cursor="text">
+    <span>
       will be text
     </span>
     <button data-cursor="block">
@@ -31,7 +31,7 @@ useCursor()
     
 <template>
   <div>
-    <span data-cursor="text">
+    <span>
       will be text
     </span>
     <button data-cursor="block">
