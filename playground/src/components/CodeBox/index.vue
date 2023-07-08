@@ -87,6 +87,7 @@ function onCopy(e: MouseEvent) {
       w-full
       overflow-auto
       rounded-2
+      data-cursor="text"
     >
       <highlightjs
         :key="activeCode.lang"

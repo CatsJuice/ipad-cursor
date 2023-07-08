@@ -45,7 +45,7 @@ export interface IpadCursorConfig {
    */
   blockPadding?: number | "auto";
 
-  /** 
+  /**
    * detect text node and apply text cursor automatically
    **/
   enableAutoTextCursor?: boolean;
@@ -110,7 +110,8 @@ export interface IpadCursorStyle {
 
 let ready = false;
 let cursorEle: HTMLDivElement | null = null;
-let isActive = false;
+let isBlockActive = false;
+let isTextActive = false;
 let styleTag: HTMLStyleElement | null = null;
 const position = { x: 0, y: 0 };
 const isServer = typeof document === "undefined";
@@ -272,17 +273,17 @@ function onMousemove(e: MouseEvent) {
 
 /**
  * Automatically apply cursor style when hover on target
- * @param target 
- * @returns 
+ * @param target
+ * @returns
  */
 function autoApplyTextCursor(target: HTMLElement) {
-  if (isActive || !config.enableAutoTextCursor) return;
-  if (target && target.childNodes.length === 1 ) {
-    const child = target.childNodes[0] as HTMLElement
-    if (child.nodeType === 3 && child.textContent?.trim() !== '') {
-      target.setAttribute('data-cursor', 'text');
-      applyTextCursor(target)
-      return
+  if (isBlockActive || isTextActive || !config.enableAutoTextCursor) return;
+  if (target && target.childNodes.length === 1) {
+    const child = target.childNodes[0] as HTMLElement;
+    if (child.nodeType === 3 && child.textContent?.trim() !== "") {
+      target.setAttribute("data-cursor", "text");
+      applyTextCursor(target);
+      return;
     }
   }
   resetCursorStyle();
@@ -397,7 +398,7 @@ function createCursor() {
  */
 function updateCursorPosition() {
   if (isServer || !cursorEle) return;
-  if (!isActive) {
+  if (!isBlockActive) {
     updateCursorStyle("--cursor-x", `${position.x}px`);
     updateCursorStyle("--cursor-y", `${position.y}px`);
   }
@@ -470,11 +471,21 @@ function extractCustomStyle(node: Element) {
  * + ---------------------- +
  */
 function registerTextNode(node: Element) {
+  let timer: any;
   function onTextOver(e: Event) {
-    applyTextCursor(e.target as HTMLElement)
+    timer && clearTimeout(timer);
+    isTextActive = true;
+    // for some edge case, two ele very close
+    timer = setTimeout(() => (isTextActive = true));
+    applyTextCursor(e.target as HTMLElement);
+  }
+  function onTextLeave() {
+    timer && clearTimeout(timer);
+    timer = setTimeout(() => (isTextActive = false));
+    resetCursorStyle();
   }
   node.addEventListener("mouseover", onTextOver, { passive: true });
-  node.addEventListener("mouseleave", resetCursorStyle, { passive: true });
+  node.addEventListener("mouseleave", onTextLeave, { passive: true });
   eventMap.set(node, [
     { event: "mouseover", handler: onTextOver },
     { event: "mouseleave", handler: resetCursorStyle },
@@ -497,9 +508,9 @@ function registerBlockNode(_node: Element) {
   function onBlockEnter() {
     const rect = node.getBoundingClientRect();
     timer && clearTimeout(timer);
-    isActive = true;
+    isBlockActive = true;
     // for some edge case, two ele very close
-    timer = setTimeout(() => (isActive = true));
+    timer = setTimeout(() => (isBlockActive = true));
     const blockPadding = config.blockPadding || 0;
     let padding = blockPadding;
     if (padding === "auto") {
@@ -561,7 +572,7 @@ function registerBlockNode(_node: Element) {
   function onBlockLeave() {
     timer && clearTimeout(timer);
     timer = setTimeout(() => {
-      isActive = false;
+      isBlockActive = false;
       cursorEle && cursorEle.classList.remove("focus");
     });
     resetCursorStyle();
@@ -572,11 +583,11 @@ function registerBlockNode(_node: Element) {
   function toggleNodeTransition(enable?: boolean) {
     const duration = enable
       ? Utils.getDuration(
-        config?.blockStyle?.durationPosition ??
-        config?.blockStyle?.durationBase ??
-        config?.normalStyle?.durationBase ??
-        "0.23s"
-      )
+          config?.blockStyle?.durationPosition ??
+            config?.blockStyle?.durationBase ??
+            config?.normalStyle?.durationBase ??
+            "0.23s"
+        )
       : "";
     node.style.setProperty(
       "transition",
