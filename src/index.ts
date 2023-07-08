@@ -44,6 +44,11 @@ export interface IpadCursorConfig {
    * Cursor padding when hover on block
    */
   blockPadding?: number | "auto";
+
+  /** 
+   * detect text node and apply text cursor automatically
+   **/
+  enableAutoTextCursor?: boolean;
 }
 /**
  * Configurable style of the cursor
@@ -259,9 +264,28 @@ function updateCursorStyle(
 }
 
 /** record mouse position */
-function recordMousePosition(e: MouseEvent) {
+function onMousemove(e: MouseEvent) {
   position.x = e.clientX;
   position.y = e.clientY;
+  autoApplyTextCursor(e.target as HTMLElement);
+}
+
+/**
+ * Automatically apply cursor style when hover on target
+ * @param target 
+ * @returns 
+ */
+function autoApplyTextCursor(target: HTMLElement) {
+  if (isActive || !config.enableAutoTextCursor) return;
+  if (target && target.childNodes.length === 1 ) {
+    const child = target.childNodes[0] as HTMLElement
+    if (child.nodeType === 3 && child.textContent?.trim() !== '') {
+      target.setAttribute('data-cursor', 'text');
+      applyTextCursor(target)
+      return
+    }
+  }
+  resetCursorStyle();
 }
 
 /**
@@ -273,7 +297,7 @@ function initCursor(_config?: IpadCursorConfig) {
   if (isServer || ready) return;
   if (_config) updateConfig(_config);
   ready = true;
-  window.addEventListener("mousemove", recordMousePosition);
+  window.addEventListener("mousemove", onMousemove);
   createCursor();
   createStyle();
   updateCursorPosition();
@@ -287,7 +311,7 @@ function initCursor(_config?: IpadCursorConfig) {
 function disposeCursor() {
   if (!ready) return;
   ready = false;
-  window.removeEventListener("mousemove", recordMousePosition);
+  window.removeEventListener("mousemove", onMousemove);
   cursorEle && cursorEle.remove();
   styleTag && styleTag.remove();
   styleTag = null;
@@ -389,21 +413,6 @@ function queryAllTargets() {
   return document.querySelectorAll("[data-cursor]");
 }
 
-
-function addDataCursorText(nodes: NodeListOf<ChildNode>) {
-  nodes.forEach((node) => {
-    if (node.nodeType === 3 && node.textContent?.trim() !== '') {
-      const parent = node.parentNode as HTMLElement // TODO: use isText Type assertion functions
-      parent.setAttribute('data-cursor', 'text')
-    }
-    if (node.nodeType === 1) {
-      const nodeEle = node as HTMLElement // TODO: use isElement Type assertion functions
-      if (nodeEle.getAttribute('data-cursor') === 'block') return
-      addDataCursorText(node.childNodes)
-    }
-  })
-}
-
 /**
  * Detect all interactive elements in the page
  * Update the binding of events, remove listeners for elements that are removed
@@ -412,7 +421,7 @@ function addDataCursorText(nodes: NodeListOf<ChildNode>) {
 function updateCursor() {
   if (isServer || !ready) return;
   const nodesMap = new Map();
-  addDataCursorText(document.body.childNodes)
+  // addDataCursorText(document.body.childNodes)
   const nodes = queryAllTargets();
   nodes.forEach((node) => {
     nodesMap.set(node, true);
@@ -462,16 +471,7 @@ function extractCustomStyle(node: Element) {
  */
 function registerTextNode(node: Element) {
   function onTextOver(e: Event) {
-    updateCursorStyle(Utils.style2Vars(config.textStyle || {}));
-    const dom = e.target as HTMLElement;
-    const fontSize = window.getComputedStyle(dom).fontSize;
-    updateCursorStyle("--cursor-font-size", fontSize);
-    updateCursorStyle(
-      Utils.style2Vars({
-        ...config.textStyle,
-        ...extractCustomStyle(dom),
-      })
-    );
+    applyTextCursor(e.target as HTMLElement)
   }
   node.addEventListener("mouseover", onTextOver, { passive: true });
   node.addEventListener("mouseleave", resetCursorStyle, { passive: true });
@@ -593,6 +593,18 @@ function registerBlockNode(_node: Element) {
 
 function resetCursorStyle() {
   updateCursorStyle(Utils.style2Vars(config.normalStyle || {}));
+}
+
+function applyTextCursor(sourceNode: HTMLElement) {
+  updateCursorStyle(Utils.style2Vars(config.textStyle || {}));
+  const fontSize = window.getComputedStyle(sourceNode).fontSize;
+  updateCursorStyle("--cursor-font-size", fontSize);
+  updateCursorStyle(
+    Utils.style2Vars({
+      ...config.textStyle,
+      ...extractCustomStyle(sourceNode),
+    })
+  );
 }
 
 /**
