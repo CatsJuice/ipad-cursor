@@ -10,7 +10,9 @@ import { customBgCodes } from "../codes/custom-bg";
 import { blurEffectCodes } from "../codes/blur-effect";
 import { customBorderCodes } from "../codes/custom-border";
 import { customAnimeSpeedCodes } from "../codes/custom-anime-speed";
+import { useDark } from "@vueuse/core";
 
+const isDark = useDark();
 const { CursorType, customCursorStyle, initCursor, disposeCursor } = useCursor({
   normalStyle: {
     backdropBlur: 12,
@@ -76,7 +78,7 @@ const showCodes = computed(() => {
           :data-cursor="CursorType.BLOCK"
           :data-cursor-style="customCursorStyle({ radius: 30 })"
         >
-          <img w-full h-full src="/ipad-cursor.svg" />
+          <img w-full h-full :src="isDark ? '/ipad-cursor-dark.svg' : '/ipad-cursor.svg'" />
         </div>
   
         <!-- slog -->

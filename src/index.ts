@@ -49,6 +49,11 @@ export interface IpadCursorConfig {
    * detect text node and apply text cursor automatically
    **/
   enableAutoTextCursor?: boolean;
+
+  /**
+   * whether to enable lighting effect
+   */
+  enableLighting?: boolean;
 }
 /**
  * Configurable style of the cursor
@@ -289,11 +294,10 @@ function autoApplyTextCursor(target: HTMLElement) {
   resetCursorStyle();
 }
 
-
 let lastNode: Element | null = null;
 const scrollHandler = () => {
   const currentNode = document.elementFromPoint(position.x, position.y);
-  const mouseLeaveEvent = new MouseEvent('mouseleave', {
+  const mouseLeaveEvent = new MouseEvent("mouseleave", {
     bubbles: true,
     cancelable: true,
     view: window,
@@ -302,8 +306,7 @@ const scrollHandler = () => {
     lastNode.dispatchEvent(mouseLeaveEvent);
   }
   lastNode = currentNode;
-}
-
+};
 
 /**
  * Init cursor, hide default cursor, and listen mousemove event
@@ -361,12 +364,14 @@ function updateConfig(_config: IpadCursorConfig) {
  */
 function createStyle() {
   if (styleTag) return;
+  const selector = `.${config.className!.split(/\s+/).join(".")}`;
   styleTag = document.createElement("style");
   styleTag.innerHTML = `
     body, * {
       cursor: none;
     }
-    .${config.className!.split(/\s+/).join(".")} {
+    ${selector} {
+      overflow: hidden;
       pointer-events: none;
       position: fixed;
       left: var(--cursor-x);
@@ -394,6 +399,28 @@ function createStyle() {
         translate(calc(-50% + var(--cursor-translateX)), calc(-50% + var(--cursor-translateY))) 
         scale(var(--cursor-scale));
     }
+    ${selector} .lighting {
+      display: none;
+    }
+    ${selector}.lighting--on .lighting {
+      display: block;
+      width: 0;
+      height: 0;
+      position: absolute;
+      left: calc(var(--lighting-size) / -2);
+      top: calc(var(--lighting-size) / -2);
+      transform: translateX(var(--lighting-offset-x, 0)) translateY(var(--lighting-offset-y, 0));
+      background-image: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0) 30%
+      );
+      border-radius: 50%;
+    }
+    ${selector}.block-active .lighting {
+      width: var(--lighting-size, 20px);
+      height: var(--lighting-size, 20px);
+    }
   `;
   document.head.appendChild(styleTag);
 }
@@ -405,7 +432,10 @@ function createStyle() {
 function createCursor() {
   if (isServer) return;
   cursorEle = document.createElement("div");
+  const lightingEle = document.createElement("div");
   cursorEle.classList.add(config.className!);
+  lightingEle.classList.add("lighting");
+  cursorEle.appendChild(lightingEle);
   document.body.appendChild(cursorEle);
   resetCursorStyle();
 }
@@ -490,16 +520,24 @@ function extractCustomStyle(node: Element) {
  */
 function registerTextNode(node: Element) {
   let timer: any;
+
+  function toggleTextActive(active?: boolean) {
+    isTextActive = !!active;
+    cursorEle &&
+      (active
+        ? cursorEle.classList.add("text-active")
+        : cursorEle.classList.remove("text-active"));
+  }
   function onTextOver(e: Event) {
     timer && clearTimeout(timer);
-    isTextActive = true;
+    toggleTextActive(true);
     // for some edge case, two ele very close
-    timer = setTimeout(() => (isTextActive = true));
+    timer = setTimeout(() => toggleTextActive(true));
     applyTextCursor(e.target as HTMLElement);
   }
   function onTextLeave() {
     timer && clearTimeout(timer);
-    timer = setTimeout(() => (isTextActive = false));
+    timer = setTimeout(() => toggleTextActive(false));
     resetCursorStyle();
   }
   node.addEventListener("mouseover", onTextOver, { passive: true });
@@ -523,12 +561,24 @@ function registerBlockNode(_node: Element) {
 
   let timer: any;
 
+  function toggleBlockActive(active?: boolean) {
+    isBlockActive = !!active;
+    cursorEle &&
+      (active
+        ? cursorEle.classList.add("block-active")
+        : cursorEle.classList.remove("block-active"));
+  }
+
   function onBlockEnter() {
+    // TODO: maybe control this in other way
+    cursorEle &&
+      cursorEle.classList.toggle("lighting--on", !!config.enableLighting);
     const rect = node.getBoundingClientRect();
     timer && clearTimeout(timer);
-    isBlockActive = true;
+    toggleBlockActive(true);
     // for some edge case, two ele very close
-    timer = setTimeout(() => (isBlockActive = true));
+    timer = setTimeout(() => toggleBlockActive(true));
+    cursorEle && cursorEle.classList.add("block-active");
     const blockPadding = config.blockPadding || 0;
     let padding = blockPadding;
     if (padding === "auto") {
@@ -536,7 +586,6 @@ function registerBlockNode(_node: Element) {
       padding = Math.max(2, Math.floor(size / 25));
     }
 
-    cursorEle!.classList.add("focus");
     updateCursorStyle("--cursor-x", `${rect.left + rect.width / 2}px`);
     updateCursorStyle("--cursor-y", `${rect.top + rect.height / 2}px`);
     updateCursorStyle("--cursor-width", `${rect.width + padding * 2}px`);
@@ -581,21 +630,24 @@ function registerBlockNode(_node: Element) {
     );
 
     toggleNodeTransition(false);
-    node.style.setProperty(
-      "--translateX",
-      `${leftOffset * ((rect.width / 100) * strength)}px`
-    );
-    node.style.setProperty(
-      "--translateY",
-      `${topOffset * ((rect.height / 100) * strength)}px`
-    );
+    const nodeTranslateX = leftOffset * ((rect.width / 100) * strength);
+    const nodeTranslateY = topOffset * ((rect.height / 100) * strength);
+    node.style.setProperty("--translateX", `${nodeTranslateX}px`);
+    node.style.setProperty("--translateY", `${nodeTranslateY}px`);
+
+    // lighting
+    if (config.enableLighting) {
+      const lightingSize = Math.max(rect.width, rect.height) * 3 * 1.2;
+      const lightingOffsetX = position.x - rect.left
+      const lightingOffsetY = position.y - rect.top
+      updateCursorStyle("--lighting-size", `${lightingSize}px`);
+      updateCursorStyle("--lighting-offset-x", `${lightingOffsetX}px`);
+      updateCursorStyle("--lighting-offset-y", `${lightingOffsetY}px`);
+    }
   }
   function onBlockLeave() {
     timer && clearTimeout(timer);
-    timer = setTimeout(() => {
-      isBlockActive = false;
-      cursorEle && cursorEle.classList.remove("focus");
-    });
+    timer = setTimeout(() => toggleBlockActive(false));
     resetCursorStyle();
     toggleNodeTransition(true);
     node.style.setProperty("transform", "translate(0px, 0px)");
@@ -604,11 +656,11 @@ function registerBlockNode(_node: Element) {
   function toggleNodeTransition(enable?: boolean) {
     const duration = enable
       ? Utils.getDuration(
-        config?.blockStyle?.durationPosition ??
-        config?.blockStyle?.durationBase ??
-        config?.normalStyle?.durationBase ??
-        "0.23s"
-      )
+          config?.blockStyle?.durationPosition ??
+            config?.blockStyle?.durationBase ??
+            config?.normalStyle?.durationBase ??
+            "0.23s"
+        )
       : "";
     node.style.setProperty(
       "transition",
