@@ -7,7 +7,7 @@ export const customBgCodes: Code[] = [
     code: `
 <body>
   <div>
-    <span data-cursor="text">
+    <span>
       will be text
     </span>
     <button data-cursor="block" data-cursor-style="background: rgba(255, 0, 0, 0.2)">
@@ -31,7 +31,7 @@ useCursor()
     
 <template>
   <div>
-    <span data-cursor="text">
+    <span>
       will be text
     </span>
     <button data-cursor="block"  data-cursor-style="background: rgba(255, 0, 0, 0.2)">

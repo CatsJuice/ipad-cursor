@@ -6,7 +6,9 @@ import { useDark } from "@vueuse/core";
 import { useHead } from "@unhead/vue";
 
 const isDark = useDark();
-const { updateConfig } = useCursor();
+const { updateConfig } = useCursor({
+  enableAutoTextCursor: true,
+});
 
 const appName = "ipad-cursor";
 const appDesc = "iPad Cursor Effect in Browser";
