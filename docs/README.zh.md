@@ -4,11 +4,11 @@
 </p>
 
 <!-- Bridge -->
-<h1 align="center">ipad-mouse </h1>
+<h2 align="center">ipad-mouse </h2>
 <!-- Description -->
-<h2 align="center">
+<p align="center">
   在浏览器中实现 iPad 的鼠标效果，可在任何框架中使用
-</h2>
+</p>
 <p align="center">
   <img src="https://img.shields.io/npm/l/ipad-cursor"/>
   <img src="https://img.shields.io/bundlephobia/min/ipad-cursor"/>
@@ -16,8 +16,8 @@
 </p>
 
 <p align="center">
-  <a href="./docs/README.zh.md"> 
-      <img src="https://img.shields.io/badge/language_%E4%B8%AD%E6%96%87-bule"/>
+  <a href="../README.md"> 
+    <img src="https://img.shields.io/badge/language_English-blue"/>
   </a>
 </p>
 
@@ -34,8 +34,15 @@
 
 - CDN
   
+  目前仅支持 `ESM` 模块
   ```html
-  <script src="https://unpkg.com/ipad-cursor@latest" />
+  <div data-cursor="block">Block</div>
+  <div data-cursor="text">text</div>
+
+  <script type="module">
+    import cursor from "https://unpkg.com/ipad-cursor@latest"
+    cursor.initCursor()
+  </script>
   ```
 
   更多详细信息请查看 [cursor.oooo.so](https://ipad-cursor.oooo.so)。
@@ -63,7 +70,47 @@
   ```
 
   > ⚠️ **注意**：到目前为止，你需要自己管理 `何时更新光标`。确保在dom更新后调用 `updateCursor`。
-  > 在未来，可能会有更好的方式来处理这个问题，详见 [路线图](#roadmap)。
+  > 在未来，可能会有更好的方式来处理这个问题，详见 [路线图](#路线图)。
+
+### 自定义样式
+
+  你可以通过配置 [配置](#配置) 来自定义光标的样式，可以在调用 `initCursor` 时传入配置，也可以在初始化后调用 `updateConfig` 来更新配置。每一种光标类型都可以单独定义样式。
+
+   ```ts
+  import { initCursor, updateConfig } from 'ipad-cursor'
+  import type { IpadCursorConfig, IpadCursorStyle } from 'ipad-cursor'
+
+  const normalStyle: IpadCursorStyle = { background: 'red' }
+  const textStyle: IpadCursorStyle = { background: 'blue' }
+  const blockStyle: IpadCursorStyle = { background: 'green' }
+  const config: IpadCursorConfig = {
+    normalStyle,
+    textStyle,
+    blockStyle,
+  };
+  initCursor(config)
+  ```
+
+  有时候，你可能需要针对某个元素自定义样式， 可以通过给元素绑定 `data-cursor-style` 来设置样式，该属性的值是由 `;` 分割的多个 `key:value` 对，其中 `key` 是 `IpadCursorStyle` 的属性，`value` 是对应的值，如果传入的 `key` 不是 `IpadCursorStyle` 的属性，会被当作 `css` 属性。
+
+  推荐通过 [customCursorStyle](#customCursorStyle%28style%29) 方法来创建样式字符串以获得更好的类型提示。
+
+  例如，为一个圆形的元素（如头像），需要单独设置：
+
+  ```html
+  <div 
+    data-cursor="block" 
+    data-cursor-style="radius: 50%" 
+    style="width: 50px; height: 50px; border-radius: 50%"
+  />
+
+  <script type="module">
+    import cursor from "https://unpkg.com/ipad-cursor@latest"
+    cursor.initCursor()
+  </script>
+  ```
+
+  查看 [样式](#样式) 浏览完整的样式列表
 
 ## 原理
 
@@ -76,7 +123,7 @@
 ## API
 
 ### initCursor(cfg)
-  > 更多详细信息请查看 [配置](#config)。
+  > 更多详细信息请查看 [配置](#配置)。
 
   初始化光标，移除默认光标，并使用 `div` 元素生成一个假光标。然后监听 `mousemove` 事件，并将假光标移动到鼠标位置。
 
@@ -87,7 +134,7 @@
   移除假光标，并移除所有事件监听器，恢复默认光标。
 
 ### updateConfig(cfg)
-  更新配置，详见 [配置](#config)。
+  更新配置，详见 [配置](#配置)。
 
 ### customCursorStyle(style)
   创建可用作 `data-cursor-style` 属性的样式字符串。
@@ -97,108 +144,43 @@
 
 建议查看 npm 包中的 [index.d.ts](./src/index.d.ts)。
 
-```ts
-/**
- *  如果没有单位，默认使用 `px`
- */
-type MaybeSize = string | number;
-/** 如果没有单位，默认使用 `ms` */
-type MaybeDuration = string | number;
-/** 不要使用 0x000000，而应使用 #000000 */
-type MaybeColor = string;
-/**
- * 光标的配置
- */
-export interface IpadCursorConfig {
-    /**
-     * 吸附力度，值越大，
-     * 值越高，悬停时可移动的块的范围越大
-     * @type {number} 在 0 和 30 之间
-     * @default 10
-     */
-    adsorptionStrength?: number;
-    /**
-     * 光标元素的类名
-     * @type {string}
-     * @default 'cursor'
-     */
-    className?: string;
-    /**
-     * 光标的样式，当它没有悬停在任何元素上时
-     */
-    normalStyle?: IpadCursorStyle;
-    /**
-     * 光标的样式，当它悬停在文本上时
-     */
-    textStyle?: IpadCursorStyle;
-    /**
-     * 光标的样式，当它悬停在块上时
-     */
-    blockStyle?: IpadCursorStyle;
-    /**
-     * 当光标悬停在块上时的填充
-     */
-    blockPadding?: number | "auto";
-}
-/**
- * 可配置的光标样式
- */
-export interface IpadCursorStyle {
-    /**
-     * 光标的宽度
-     */
-    width?: MaybeSize;
-    /**
-     * 光标的宽度
-     */
-    height?: MaybeSize;
-    /**
-     * 光标的边框半径
-     */
-    radius?: MaybeSize;
-    /**
-     * 基本属性如宽度、高度、半径、边框、背景颜色的过渡持续时间
-     */
-    durationBase?: MaybeDuration;
-    /**
-     * 位置：左、上的过渡持续时间
-     */
-    durationPosition?: MaybeDuration;
-    /**
-     * backdrop-filter 的过渡持续时间
-     */
-    durationBackdropFilter?: MaybeDuration;
-    /**
-     * 光标的背景颜色
-     */
-    background?: MaybeColor;
-    /**
-     * 光标的边框
-     * @example '1px solid rgba(100, 100, 100, 0.1)'
-     */
-    border?: string;
-    /** 光标的 z-index */
-    zIndex?: number;
-    /**
-     * 光标的缩放
-     */
-    scale?: number;
-    /**
-     * backdrop-filter blur
-     */
-    backdropBlur?: MaybeSize;
-    /**
-     * backdrop-filter saturate
-     */
-    backdropSaturate?: string;
-}
-```
+| 名称                              | 类型              | 默认值               | 描述                                                                               | 是否必须 |
+| --------------------------------- | ----------------- | -------------------- | ---------------------------------------------------------------------------------- | -------- |
+| `adsorptionStrength`              | `number`          | `0.2`                | 吸附力强度                                                                         | No       |
+| `className`                       | `string`          | `'ipad-cursor'`      | 光标的css类名                                                                      | No       |
+| `blockPadding`                    | `number`          | `auto`               | 当光标聚焦在 `block` 时的内边距，设置为 `auto` 将自动计算                          | No       |
+| `enableAutoTextCursor`(`v0.2.0+`) | `boolean`         | `false`              | 自动检测 `text` 类型的光标 [#12](https://github.com/CatsJuice/ipad-cursor/pull/12) | No       |
+| `normalStyle`                     | `IpadCursorStyle` | 请查看 [样式](#样式) | 正常情况下的光标样式, see [Style](#style)                                          | No       |
+| `textStyle`                       | `IpadCursorStyle` | 请查看 [样式](#样式) | 文字模式下的光标样式, see [Style](#style)                                          | No       |
+| `blockStyle`                      | `IpadCursorStyle` | 请查看 [样式](#样式) | 块元素下的光标样式, see [Style](#style)                                            | No       |
+
+
+## 样式
+
+| 名称                     | 类型            | 描述                                                                                                               | 例子                               |
+| ------------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
+| `width`                  | `MaybeSize`     | 光标宽度                                                                                                           | `'10px'`, `10`, `'10'`             |
+| `height`                 | `MaybeSize`     | 光标高度                                                                                                           | `'10px'`, `10`, `'10'`             |
+| `radius`                 | `MaybeSize`     | 光标半径                                                                                                           | `'10px'`, `10`, `'10'`             |
+| `background`             | `string`        | 光标背景颜色                                                                                                       | `'#fff'`, `'red'`, `'rgba(0,0,0)'` |
+| `border`                 | `string`        | 光标边框的css样式                                                                                                  | `'1px solid black'`                |
+| `zIndex`                 | `number`        | 光标的z-index层级                                                                                                  | `1`                                |
+| `scale`                  | `number`        | 光标缩放                                                                                                           | `1.05`                             |
+| `backdropBlur`           | `MaybeSize`     | 光标的 backdrop-filter 模糊                                                                                        | `'10px'`, `10`, `'10'`             |
+| `backdropSaturate`       | `string`        | 光标的 backdrop-filter 饱和度                                                                                      | `180%`                             |
+| `durationBase`           | `MaybeDuration` | 光标的基础属性过度时间 如 `width`, `height`, `radius`, `border`, `background-color`, 如果未指定单位, 将会使用 `ms` | `'1000'`, `1000`, `200ms`, `0.23s` |
+| `durationPosition`       | `MaybeDuration` | 光标的位置属性过度时间 如 `top`, `left`, 如果未指定单位, 将会使用 `ms`                                             | `'1000'`, `1000`, `200ms`, `0.23s` |
+| `durationBackdropFilter` | `MaybeDuration` | 光标的backdrop-filter属性过度时间, 如果未指定单位, 将会使用 `ms`                                                   | `'1000'`, `1000`, `200ms`, `0.23s` |
+
+### 默认样式
+
+请查看 [index.ts](./src/index.ts) 中的 `getDefaultConfig` 方法
 
 
 ## 路线图
 
 - [x] 添加中文文档
-- [ ] API 文档
+- [x] API 文档
 - [ ] 更多示例
 - [ ] 自动检测 dom 更新，并自动调用 `updateCursor`
     - 可能会使用 [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver)
