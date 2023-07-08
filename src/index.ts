@@ -264,6 +264,22 @@ function recordMousePosition(e: MouseEvent) {
   position.y = e.clientY;
 }
 
+const mouseLeaveEvent = new MouseEvent('mouseleave', {
+  bubbles: true,
+  cancelable: true,
+  view: window,
+});
+
+let lastNode: Element | null = null;
+const scrollHandler = () => {
+  const currentNode = document.elementFromPoint(position.x, position.y);
+  if (currentNode !== lastNode && lastNode) {
+    lastNode.dispatchEvent(mouseLeaveEvent);
+  }
+  lastNode = currentNode;
+}
+
+
 /**
  * Init cursor, hide default cursor, and listen mousemove event
  * will only run once in client even if called multiple times
@@ -274,6 +290,7 @@ function initCursor(_config?: IpadCursorConfig) {
   if (_config) updateConfig(_config);
   ready = true;
   window.addEventListener("mousemove", recordMousePosition);
+  window.addEventListener("scroll", scrollHandler);
   createCursor();
   createStyle();
   updateCursorPosition();
@@ -288,6 +305,7 @@ function disposeCursor() {
   if (!ready) return;
   ready = false;
   window.removeEventListener("mousemove", recordMousePosition);
+  window.removeEventListener("scroll", scrollHandler);
   cursorEle && cursorEle.remove();
   styleTag && styleTag.remove();
   styleTag = null;
@@ -518,6 +536,9 @@ function registerBlockNode(_node: Element) {
     );
   }
   function onBlockMove() {
+    if (!isActive) {
+      onBlockEnter();
+    }
     const rect = node.getBoundingClientRect();
     const halfHeight = rect.height / 2;
     const topOffset = (position.y - rect.top - halfHeight) / halfHeight;
