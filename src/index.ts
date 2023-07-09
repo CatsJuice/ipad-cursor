@@ -70,7 +70,7 @@ export interface IpadCursorStyle {
   /**
    * Border radius of cursor
    */
-  radius?: MaybeSize;
+  radius?: MaybeSize | "auto";
 
   /**
    * Transition duration of basic properties like width, height, radius, border, background-color
@@ -242,7 +242,7 @@ function getDefaultConfig(): IpadCursorConfig {
     durationBase: "0.23s",
     durationBackdropFilter: "0.1s",
     backdropSaturate: "120%",
-    radius: "10px",
+    radius: "auto",
     scale: 1,
   };
   const defaultConfig: IpadCursorConfig = {
@@ -587,11 +587,19 @@ function registerBlockNode(_node: Element) {
     // for some edge case, two ele very close
     timer = setTimeout(() => toggleBlockActive(true));
     cursorEle && cursorEle.classList.add("block-active");
+    const updateStyleObj: IpadCursorStyle = { ...(config.blockStyle || {}) }
     const blockPadding = config.blockPadding || 0;
     let padding = blockPadding;
+    let radius = config.blockStyle?.radius;
     if (padding === "auto") {
       const size = Math.min(rect.width, rect.height);
       padding = Math.max(2, Math.floor(size / 25));
+    }
+    if (radius === "auto") {
+      const paddingCss = Utils.getSize(padding);
+      const nodeRadius = window.getComputedStyle(node).borderRadius;
+      radius = `calc(${paddingCss} + ${nodeRadius})`;
+      updateStyleObj.radius = radius;
     }
 
     updateCursorStyle("--cursor-x", `${rect.left + rect.width / 2}px`);
@@ -600,7 +608,7 @@ function registerBlockNode(_node: Element) {
     updateCursorStyle("--cursor-height", `${rect.height + padding * 2}px`);
 
     const styleToUpdate: IpadCursorStyle = {
-      ...(config.blockStyle || {}),
+      ...updateStyleObj,
       ...extractCustomStyle(node),
     };
 
@@ -646,8 +654,8 @@ function registerBlockNode(_node: Element) {
     // lighting
     if (config.enableLighting) {
       const lightingSize = Math.max(rect.width, rect.height) * 3 * 1.2;
-      const lightingOffsetX = position.x - rect.left
-      const lightingOffsetY = position.y - rect.top
+      const lightingOffsetX = position.x - rect.left;
+      const lightingOffsetY = position.y - rect.top;
       updateCursorStyle("--lighting-size", `${lightingSize}px`);
       updateCursorStyle("--lighting-offset-x", `${lightingOffsetX}px`);
       updateCursorStyle("--lighting-offset-y", `${lightingOffsetY}px`);
@@ -684,6 +692,8 @@ function registerBlockNode(_node: Element) {
 }
 
 function resetCursorStyle() {
+  if (config.normalStyle?.radius === "auto")
+    config.normalStyle.radius = config.normalStyle.width;
   updateCursorStyle(Utils.style2Vars(config.normalStyle || {}));
 }
 
