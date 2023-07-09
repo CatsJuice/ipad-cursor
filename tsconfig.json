@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "experimentalDecorators": true,
     "module": "esnext",
     "target": "es2019",
