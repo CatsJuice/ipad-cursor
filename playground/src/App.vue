@@ -7,6 +7,7 @@ import { useHead } from "@unhead/vue";
 
 const isDark = useDark();
 const { updateConfig } = useCursor({
+  enableMouseDownEffect: true,
   enableAutoTextCursor: true,
   enableLighting: true,
   normalStyle: {

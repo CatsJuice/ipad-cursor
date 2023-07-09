@@ -58,9 +58,16 @@ export interface IpadCursorConfig {
    * whether to enable lighting effect
    */
   enableLighting?: boolean;
+
+  /**
+   * whether to apply effect for mousedown action
+   */
+  enableMouseDownEffect?: boolean;
 }
 /**
- * Configurable style of the cursor
+ * Configurable style of the cursor (Experimental)
+ * This feature is Experimental, so it's set to false by default.
+ * And it not support `block` yet
  */
 export interface IpadCursorStyle {
   /**
@@ -295,14 +302,14 @@ function onMousemove(e: MouseEvent) {
 }
 
 function onMousedown(e?: MouseEvent) {
-  if (isMouseDown) return;
+  if (isMouseDown || !config.enableMouseDownEffect || isBlockActive) return;
   isMouseDown = true;
   mousedownStyleRecover = { ...latestCursorStyle };
   updateCursorStyle(Utils.style2Vars(config.mouseDownStyle || {}));
 }
 
 function onMouseup(e?: MouseEvent) {
-  if (!isMouseDown) return;
+  if (!isMouseDown  || !config.enableMouseDownEffect || isBlockActive) return;
   isMouseDown = false;
   const target = mousedownStyleRecover;
   const styleToRecover = Utils.objectKeys(
