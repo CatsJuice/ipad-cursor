@@ -64,7 +64,7 @@ export interface IpadCursorStyle {
     /**
      * Border radius of cursor
      */
-    radius?: MaybeSize;
+    radius?: MaybeSize | "auto";
     /**
      * Transition duration of basic properties like width, height, radius, border, background-color
      */
