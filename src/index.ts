@@ -233,6 +233,7 @@ function getDefaultConfig(): IpadCursorConfig {
     background: "rgba(100, 100, 100, 0.3)",
     durationBackdropFilter: "1s",
     radius: "10px",
+    scale: 1,
   };
   const blockStyle: IpadCursorStyle = {
     background: "rgba(100, 100, 100, 0.1)",
@@ -242,6 +243,7 @@ function getDefaultConfig(): IpadCursorConfig {
     durationBackdropFilter: "0.1s",
     backdropSaturate: "120%",
     radius: "10px",
+    scale: 1,
   };
   const defaultConfig: IpadCursorConfig = {
     blockPadding: "auto",
@@ -371,6 +373,7 @@ function createStyle() {
       cursor: none;
     }
     ${selector} {
+      --cursor-transform-duration: 0.23s;
       overflow: hidden;
       pointer-events: none;
       position: fixed;
@@ -394,10 +397,15 @@ function createStyle() {
         background-color var(--cursor-duration) ease,
         left var(--cursor-position-duration) ease,
         top var(--cursor-position-duration) ease,
-        backdrop-filter var(--cursor-blur-duration) ease;
+        backdrop-filter var(--cursor-blur-duration) ease,
+        transform var(--cursor-transform-duration) ease;
       transform: 
-        translate(calc(-50% + var(--cursor-translateX)), calc(-50% + var(--cursor-translateY))) 
-        scale(var(--cursor-scale));
+        translateX(calc(var(--cursor-translateX, 0px) - 50%)) 
+        translateY(calc(var(--cursor-translateY, 0px) - 50%))
+        scale(var(--cursor-scale, 1));
+    }
+    ${selector}.block-active {
+      --cursor-transform-duration: 0s;
     }
     ${selector} .lighting {
       display: none;
@@ -544,7 +552,7 @@ function registerTextNode(node: Element) {
   node.addEventListener("mouseleave", onTextLeave, { passive: true });
   eventMap.set(node, [
     { event: "mouseover", handler: onTextOver },
-    { event: "mouseleave", handler: resetCursorStyle },
+    { event: "mouseleave", handler: onTextLeave },
   ]);
 }
 
