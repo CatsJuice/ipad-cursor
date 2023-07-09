@@ -160,20 +160,20 @@ It is recommended to see [index.d.ts](./src/index.d.ts) in the npm package.
 
 ## Style
 
-| Name                     | Type            | Description                                                                                                                                          | example                            |
-| ------------------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `width`                  | `MaybeSize`     | The width of cursor                                                                                                                                  | `'10px'`, `10`, `'10'`             |
-| `height`                 | `MaybeSize`     | The height of cursor                                                                                                                                 | `'10px'`, `10`, `'10'`             |
-| `radius`                 | `MaybeSize`     | The border radius of cursor                                                                                                                          | `'10px'`, `10`, `'10'`             |
-| `background`             | `string`        | The background color of cursor                                                                                                                       | `'#fff'`, `'red'`, `'rgba(0,0,0)'` |
-| `border`                 | `string`        | The css border property of cursor                                                                                                                    | `'1px solid black'`                |
-| `zIndex`                 | `number`        | The z-index of cursor                                                                                                                                | `1`                                |
-| `scale`                  | `number`        | The scale of cursor                                                                                                                                  | `1.05`                             |
-| `backdropBlur`           | `MaybeSize`     | The backdrop-filter blur of cursor                                                                                                                   | `'10px'`, `10`, `'10'`             |
-| `backdropSaturate`       | `string`        | The backdrop-filter saturate of cursor                                                                                                               | `180%`                             |
-| `durationBase`           | `MaybeDuration` | Transition duration of basic properties like `width`, `height`, `radius`, `border`, `background-color`, if unit if not  specified, `ms` will be used | `'1000'`, `1000`, `200ms`, `0.23s` |
-| `durationPosition`       | `MaybeDuration` | Transition duration of position properties like `top`, `left`, if unit if not  specified, `ms` will be used                                          | `'1000'`, `1000`, `200ms`, `0.23s` |
-| `durationBackdropFilter` | `MaybeDuration` | Transition duration of backdrop-filter property, if unit if not  specified, `ms` will be used                                                        | `'1000'`, `1000`, `200ms`, `0.23s` |
+| Name                     | Type                    | Description                                                                                                                                          | example                            |
+| ------------------------ | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `width`                  | `MaybeSize`             | The width of cursor                                                                                                                                  | `'10px'`, `10`, `'10'`             |
+| `height`                 | `MaybeSize`             | The height of cursor                                                                                                                                 | `'10px'`, `10`, `'10'`             |
+| `radius`                 | `MaybeSize` \| `'auto'` | The border radius of cursor, if set to `auto` for `blockStyle`, it will be calculated by dom's css `border-radius` and `config.blockPadding`.        | `'10px'`, `10`, `'10'`, `'auto'`   |
+| `background`             | `string`                | The background color of cursor                                                                                                                       | `'#fff'`, `'red'`, `'rgba(0,0,0)'` |
+| `border`                 | `string`                | The css border property of cursor                                                                                                                    | `'1px solid black'`                |
+| `zIndex`                 | `number`                | The z-index of cursor                                                                                                                                | `1`                                |
+| `scale`                  | `number`                | The scale of cursor                                                                                                                                  | `1.05`                             |
+| `backdropBlur`           | `MaybeSize`             | The backdrop-filter blur of cursor                                                                                                                   | `'10px'`, `10`, `'10'`             |
+| `backdropSaturate`       | `string`                | The backdrop-filter saturate of cursor                                                                                                               | `180%`                             |
+| `durationBase`           | `MaybeDuration`         | Transition duration of basic properties like `width`, `height`, `radius`, `border`, `background-color`, if unit if not  specified, `ms` will be used | `'1000'`, `1000`, `200ms`, `0.23s` |
+| `durationPosition`       | `MaybeDuration`         | Transition duration of position properties like `top`, `left`, if unit if not  specified, `ms` will be used                                          | `'1000'`, `1000`, `200ms`, `0.23s` |
+| `durationBackdropFilter` | `MaybeDuration`         | Transition duration of backdrop-filter property, if unit if not  specified, `ms` will be used                                                        | `'1000'`, `1000`, `200ms`, `0.23s` |
 
 ### Default Style
 

@@ -11,7 +11,11 @@ const { updateConfig } = useCursor({
   enableLighting: true,
   normalStyle: {
     scale: 1,
-  }
+  },
+  blockPadding: "auto",
+  blockStyle: {
+    radius: "auto",
+  },
 });
 
 const appName = "ipad-cursor";

@@ -33,6 +33,7 @@ const btns = [
     label: "Custom Border",
     style: customCursorStyle({
       border: "1px solid currentColor",
+      radius: 0,
     }),
   },
   {
@@ -76,7 +77,7 @@ const showCodes = computed(() => {
           w-100px
           h-100px
           :data-cursor="CursorType.BLOCK"
-          :data-cursor-style="customCursorStyle({ radius: 30 })"
+          rounded-26px
         >
           <img w-full h-full :src="isDark ? '/ipad-cursor-dark.svg' : '/ipad-cursor.svg'" />
         </div>

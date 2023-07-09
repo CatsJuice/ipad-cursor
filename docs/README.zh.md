@@ -158,20 +158,20 @@
 
 ## 样式
 
-| 名称                     | 类型            | 描述                                                                                                               | 例子                               |
-| ------------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
-| `width`                  | `MaybeSize`     | 光标宽度                                                                                                           | `'10px'`, `10`, `'10'`             |
-| `height`                 | `MaybeSize`     | 光标高度                                                                                                           | `'10px'`, `10`, `'10'`             |
-| `radius`                 | `MaybeSize`     | 光标半径                                                                                                           | `'10px'`, `10`, `'10'`             |
-| `background`             | `string`        | 光标背景颜色                                                                                                       | `'#fff'`, `'red'`, `'rgba(0,0,0)'` |
-| `border`                 | `string`        | 光标边框的css样式                                                                                                  | `'1px solid black'`                |
-| `zIndex`                 | `number`        | 光标的z-index层级                                                                                                  | `1`                                |
-| `scale`                  | `number`        | 光标缩放                                                                                                           | `1.05`                             |
-| `backdropBlur`           | `MaybeSize`     | 光标的 backdrop-filter 模糊                                                                                        | `'10px'`, `10`, `'10'`             |
-| `backdropSaturate`       | `string`        | 光标的 backdrop-filter 饱和度                                                                                      | `180%`                             |
-| `durationBase`           | `MaybeDuration` | 光标的基础属性过度时间 如 `width`, `height`, `radius`, `border`, `background-color`, 如果未指定单位, 将会使用 `ms` | `'1000'`, `1000`, `200ms`, `0.23s` |
-| `durationPosition`       | `MaybeDuration` | 光标的位置属性过度时间 如 `top`, `left`, 如果未指定单位, 将会使用 `ms`                                             | `'1000'`, `1000`, `200ms`, `0.23s` |
-| `durationBackdropFilter` | `MaybeDuration` | 光标的backdrop-filter属性过度时间, 如果未指定单位, 将会使用 `ms`                                                   | `'1000'`, `1000`, `200ms`, `0.23s` |
+| 名称                     | 类型                     | 描述                                                                                                               | 例子                               |
+| ------------------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
+| `width`                  | `MaybeSize`              | 光标宽度                                                                                                           | `'10px'`, `10`, `'10'`             |
+| `height`                 | `MaybeSize`              | 光标高度                                                                                                           | `'10px'`, `10`, `'10'`             |
+| `radius`                 | `MaybeSize`  \| `'auto'` | 光标半径, 当给 `blockStyle` 设置为 `auto`  ,将根据元素的 css `border-radius` 和 `config.blockPadding` 自动计算     | `'10px'`, `10`, `'10'`, `'auto'`   |
+| `background`             | `string`                 | 光标背景颜色                                                                                                       | `'#fff'`, `'red'`, `'rgba(0,0,0)'` |
+| `border`                 | `string`                 | 光标边框的css样式                                                                                                  | `'1px solid black'`                |
+| `zIndex`                 | `number`                 | 光标的z-index层级                                                                                                  | `1`                                |
+| `scale`                  | `number`                 | 光标缩放                                                                                                           | `1.05`                             |
+| `backdropBlur`           | `MaybeSize`              | 光标的 backdrop-filter 模糊                                                                                        | `'10px'`, `10`, `'10'`             |
+| `backdropSaturate`       | `string`                 | 光标的 backdrop-filter 饱和度                                                                                      | `180%`                             |
+| `durationBase`           | `MaybeDuration`          | 光标的基础属性过度时间 如 `width`, `height`, `radius`, `border`, `background-color`, 如果未指定单位, 将会使用 `ms` | `'1000'`, `1000`, `200ms`, `0.23s` |
+| `durationPosition`       | `MaybeDuration`          | 光标的位置属性过度时间 如 `top`, `left`, 如果未指定单位, 将会使用 `ms`                                             | `'1000'`, `1000`, `200ms`, `0.23s` |
+| `durationBackdropFilter` | `MaybeDuration`          | 光标的backdrop-filter属性过度时间, 如果未指定单位, 将会使用 `ms`                                                   | `'1000'`, `1000`, `200ms`, `0.23s` |
 
 ### 默认样式
 
