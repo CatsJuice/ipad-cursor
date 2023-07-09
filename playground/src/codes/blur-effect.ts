@@ -47,4 +47,31 @@ const style = customCursorStyle({
   </div>
 </template>`,
   },
+  {
+    lang: "react",
+    code: `// app.tsx
+import { IPadCursorProvider, useIPadCursor } from "ipad-cursor/react";
+import type { IpadCursorConfig } from "ipad-cursor";
+
+function App() {
+  const config: IpadCursorConfig = {};
+  const { customCursorStyle } = useIPadCursor();
+  const style = customCursorStyle({
+    backdropBlur: 0,
+    durationBackdropFilter: 1000,
+  });
+
+  return (
+    <IPadCursorProvider config={config}>
+      <span>
+        will be text
+      </span>
+      <button data-cursor="block" data-cursor-style={style}>
+        Button
+      </button>
+    </IPadCursorProvider>
+  )
+}
+`,
+  },
 ];

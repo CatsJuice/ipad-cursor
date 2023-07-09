@@ -15,6 +15,7 @@
   },
   "exclude": [
     "*.vue",
-    "playground"
+    "playground",
+    "examples"
   ]
 }

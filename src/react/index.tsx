@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from "react";
 import {
   CursorType,
   initCursor,
@@ -24,31 +24,41 @@ const useIPadCursorInit = (config?: IpadCursorConfig) => {
     updateCursor,
     updateConfig,
     customCursorStyle,
-  }
-}
+  };
+};
 
-const CursorContext = React.createContext<Partial<typeof CursorOutput>>({})
-export function IPadCursorProvider({ children }: { children: React.ReactNode }) {
-  const { CursorType,
+const CursorContext = React.createContext<Partial<typeof CursorOutput>>({});
+export function IPadCursorProvider({
+  children,
+  config,
+}: {
+  children: React.ReactNode;
+  config?: IpadCursorConfig
+}) {
+  const {
+    CursorType,
     disposeCursor,
     initCursor,
     updateCursor,
     updateConfig,
-    customCursorStyle, } = useIPadCursorInit();
+    customCursorStyle,
+  } = useIPadCursorInit(config);
   return (
-    <CursorContext.Provider value={{
-      CursorType,
-      disposeCursor,
-      initCursor,
-      updateCursor,
-      updateConfig,
-      customCursorStyle,
-    }} >
+    <CursorContext.Provider
+      value={{
+        CursorType,
+        disposeCursor,
+        initCursor,
+        updateCursor,
+        updateConfig,
+        customCursorStyle,
+      }}
+    >
       {children}
     </CursorContext.Provider>
-  )
+  );
 }
 
 export function useIPadCursor() {
-  return React.useContext(CursorContext)
+  return React.useContext(CursorContext);
 }

@@ -13,4 +13,5 @@ defineProps<{lang: Lang}>()
   <div v-else-if="lang === 'npm'" i-logos:npm />
   <div v-else-if="lang === 'yarn'" i-logos:yarn />
   <div v-else-if="lang === 'pnpm'" i-logos:pnpm />
+  <div v-else-if="lang === 'react'" i-logos:react />
 </template>

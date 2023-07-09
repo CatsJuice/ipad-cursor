@@ -32,6 +32,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.3.3
     version: registry.npmmirror.com/@types/node@20.3.3
+  '@types/react':
+    specifier: ^18.2.14
+    version: registry.npmmirror.com/@types/react@18.2.14
   '@unhead/vue':
     specifier: ^1.1.30
     version: registry.npmmirror.com/@unhead/vue@1.1.30(vue@3.2.47)
@@ -65,6 +68,9 @@ devDependencies:
   prompts:
     specifier: ^2.4.2
     version: registry.npmmirror.com/prompts@2.4.2
+  react:
+    specifier: ^18.2.0
+    version: registry.npmmirror.com/react@18.2.0
   shx:
     specifier: ^0.3.4
     version: registry.npmmirror.com/shx@0.3.4
@@ -820,6 +826,28 @@ packages:
     resolution: {integrity: sha512-wheIYdr4NYML61AjC8MKj/2jrR/kDQri/CIpVoZwldwhnIrD/j9jIU5bJ8yBKuB2VhpFV7Ab6G2XkBjv9r9Zzw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-20.3.3.tgz}
     name: '@types/node'
     version: 20.3.3
+    dev: true
+
+  registry.npmmirror.com/@types/prop-types@15.7.5:
+    resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/prop-types/-/prop-types-15.7.5.tgz}
+    name: '@types/prop-types'
+    version: 15.7.5
+    dev: true
+
+  registry.npmmirror.com/@types/react@18.2.14:
+    resolution: {integrity: sha512-A0zjq+QN/O0Kpe30hA1GidzyFjatVvrpIvWLxD+xv67Vt91TWWgco9IvrJBkeyHm1trGaFS/FSGqPlhyeZRm0g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/react/-/react-18.2.14.tgz}
+    name: '@types/react'
+    version: 18.2.14
+    dependencies:
+      '@types/prop-types': registry.npmmirror.com/@types/prop-types@15.7.5
+      '@types/scheduler': registry.npmmirror.com/@types/scheduler@0.16.3
+      csstype: registry.npmmirror.com/csstype@3.1.2
+    dev: true
+
+  registry.npmmirror.com/@types/scheduler@0.16.3:
+    resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/scheduler/-/scheduler-0.16.3.tgz}
+    name: '@types/scheduler'
+    version: 0.16.3
     dev: true
 
   registry.npmmirror.com/@types/web-bluetooth@0.0.17:
@@ -1828,6 +1856,12 @@ packages:
     version: 2.6.21
     dev: true
 
+  registry.npmmirror.com/csstype@3.1.2:
+    resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/csstype/-/csstype-3.1.2.tgz}
+    name: csstype
+    version: 3.1.2
+    dev: true
+
   registry.npmmirror.com/data-urls@4.0.0:
     resolution: {integrity: sha512-/mMTei/JXPqvFqQtfyTowxmJVwr2PVAeCcDxyFf6LhoOu/09TX2OX3kb2wzi4DMXcfj4OItwDOnhl5oziPnT6g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/data-urls/-/data-urls-4.0.0.tgz}
     name: data-urls
@@ -2621,6 +2655,12 @@ packages:
     hasBin: true
     dev: true
 
+  registry.npmmirror.com/js-tokens@4.0.0:
+    resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/js-tokens/-/js-tokens-4.0.0.tgz}
+    name: js-tokens
+    version: 4.0.0
+    dev: true
+
   registry.npmmirror.com/jsdom@22.1.0:
     resolution: {integrity: sha512-/9AVW7xNbsBv6GfWho4TTNjEo9fe6Zhf9O7s0Fhhr3u+awPwAJMKwAMXnkk5vBxflqLW9hTHX/0cs+P3gW+cQw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/jsdom/-/jsdom-22.1.0.tgz}
     name: jsdom
@@ -2718,6 +2758,15 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       p-locate: registry.npmmirror.com/p-locate@5.0.0
+    dev: true
+
+  registry.npmmirror.com/loose-envify@1.4.0:
+    resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/loose-envify/-/loose-envify-1.4.0.tgz}
+    name: loose-envify
+    version: 1.4.0
+    hasBin: true
+    dependencies:
+      js-tokens: registry.npmmirror.com/js-tokens@4.0.0
     dev: true
 
   registry.npmmirror.com/lower-case@1.1.4:
@@ -3536,6 +3585,15 @@ packages:
       defu: registry.npmmirror.com/defu@6.1.2
       destr: registry.npmmirror.com/destr@2.0.0
       flat: registry.npmmirror.com/flat@5.0.2
+    dev: true
+
+  registry.npmmirror.com/react@18.2.0:
+    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react/-/react-18.2.0.tgz}
+    name: react
+    version: 18.2.0
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      loose-envify: registry.npmmirror.com/loose-envify@1.4.0
     dev: true
 
   registry.npmmirror.com/read-package-json-fast@3.0.2:
