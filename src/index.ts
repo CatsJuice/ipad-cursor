@@ -29,17 +29,42 @@ export interface IpadCursorConfig {
   className?: string;
 
   /**
-   * The style of the cursor, when it not hover on any element
+   * The style of the cursor, when it does not hover on any element
    */
   normalStyle?: IpadCursorStyle;
   /**
-   * The style of the cursor, when it hover on text
+   * The style of the cursor, when it does not hover on any element and mouse down
+   */
+  normalDownStyle?: IpadCursorStyle;
+  /**
+   * The style of the cursor, when it does not hover on any element and mouse up
+   */
+  normalUpStyle?: IpadCursorStyle;
+  /**
+   * The style of the cursor, when it hovers on text
    */
   textStyle?: IpadCursorStyle;
   /**
-   * The style of the cursor, when it hover on block
+   * The style of the cursor, when it presses on text
+   */
+  textDownStyle?: IpadCursorStyle;
+  /**
+   * The style of the cursor, when it releases on text
+   */
+  textUpStyle?: IpadCursorStyle;
+  /**
+   * The style of the cursor, when it hovers on a block
    */
   blockStyle?: IpadCursorStyle;
+  /**
+   * The style of the cursor, when it presses on a block
+   */
+  blockDownStyle?: IpadCursorStyle;
+  /**
+   * The style of the cursor, when it releases on a block
+   */
+  blockUpStyle?: IpadCursorStyle;
+
   /**
    * Cursor padding when hover on block
    */
@@ -117,6 +142,7 @@ let ready = false;
 let cursorEle: HTMLDivElement | null = null;
 let isBlockActive = false;
 let isTextActive = false;
+let isMouseDown = false;
 let styleTag: HTMLStyleElement | null = null;
 const position = { x: 0, y: 0 };
 const isServer = typeof document === "undefined";
@@ -212,46 +238,75 @@ class Utils {
  * @returns
  */
 function getDefaultConfig(): IpadCursorConfig {
+  const normalDownStyle: IpadCursorStyle = {
+    background: "rgba(150, 150, 150, 0.6)",
+    scale: 0.8,
+  };
+  const normalUpStyle: IpadCursorStyle = {
+    background: "rgba(150, 150, 150, 0.2)",
+    scale: 1,
+  };
   const normalStyle: IpadCursorStyle = {
+    ...normalUpStyle,
     width: "20px",
     height: "20px",
     radius: "50%",
     durationBase: "0.23s",
     durationPosition: "0s",
     durationBackdropFilter: "0s",
-    background: "rgba(150, 150, 150, 0.2)",
     border: "1px solid rgba(100, 100, 100, 0.1)",
     zIndex: 9999,
-    scale: 1,
     backdropBlur: "0px",
     backdropSaturate: "180%",
   };
+
+  const textDownStyle: IpadCursorStyle = {
+    background: "rgba(100, 100, 100, 0.7)",
+    scale: 0.8,
+  };
+  const textUpStyle: IpadCursorStyle = {
+    background: "rgba(100, 100, 100, 0.3)",
+    scale: 1,
+  };
   const textStyle: IpadCursorStyle = {
+    ...textUpStyle,
     width: "4px",
     height: "1.2em",
     border: "0px solid rgba(100, 100, 100, 0)",
-    background: "rgba(100, 100, 100, 0.3)",
     durationBackdropFilter: "1s",
     radius: "10px",
+  };
+
+  const blockDownStyle: IpadCursorStyle = {
+    background: "rgba(100, 100, 100, 0.3)",
+    scale: 0.95,
+  };
+  const blockUpStyle: IpadCursorStyle = {
+    background: "rgba(100, 100, 100, 0.1)",
     scale: 1,
   };
   const blockStyle: IpadCursorStyle = {
-    background: "rgba(100, 100, 100, 0.1)",
+    ...blockUpStyle,
     border: "1px solid rgba(100, 100, 100, 0.05)",
     backdropBlur: "0px",
     durationBase: "0.23s",
     durationBackdropFilter: "0.1s",
     backdropSaturate: "120%",
     radius: "10px",
-    scale: 1,
   };
   const defaultConfig: IpadCursorConfig = {
     blockPadding: "auto",
     adsorptionStrength: 10,
     className: "ipad-cursor",
     normalStyle,
+    normalDownStyle,
+    normalUpStyle,
     textStyle,
+    textDownStyle,
+    textUpStyle,
     blockStyle,
+    blockDownStyle,
+    blockUpStyle,
   };
   return defaultConfig;
 }
@@ -276,6 +331,30 @@ function onMousemove(e: MouseEvent) {
   position.x = e.clientX;
   position.y = e.clientY;
   autoApplyTextCursor(e.target as HTMLElement);
+}
+
+function onMousedown(e?: MouseEvent) {
+  if (isMouseDown) return;
+  isMouseDown = true;
+  if (isTextActive) {
+    updateCursorStyle(Utils.style2Vars(config.textDownStyle || {}));
+  } else if (isBlockActive) {
+    updateCursorStyle(Utils.style2Vars(config.blockDownStyle || {}));
+  } else {
+    updateCursorStyle(Utils.style2Vars(config.normalDownStyle || {}));
+  }
+}
+
+function onMouseup(e?: MouseEvent) {
+  if (!isMouseDown) return;
+  if (isTextActive) {
+    updateCursorStyle(Utils.style2Vars(config.textUpStyle || {}));
+  } else if (isBlockActive) {
+    updateCursorStyle(Utils.style2Vars(config.blockUpStyle || {}));
+  } else {
+    updateCursorStyle(Utils.style2Vars(config.normalUpStyle || {}));
+  }
+  isMouseDown = false;
 }
 
 /**
@@ -320,6 +399,8 @@ function initCursor(_config?: IpadCursorConfig) {
   if (_config) updateConfig(_config);
   ready = true;
   window.addEventListener("mousemove", onMousemove);
+  window.addEventListener("mousedown", onMousedown);
+  window.addEventListener("mouseup", onMouseup);
   window.addEventListener("scroll", scrollHandler);
   createCursor();
   createStyle();
@@ -386,8 +467,8 @@ function createStyle() {
       border: var(--cursor-border);
       z-index: var(--cursor-z-index);
       font-size: var(--cursor-font-size);
-      backdrop-filter: 
-        blur(var(--cursor-bg-blur)) 
+      backdrop-filter:
+        blur(var(--cursor-bg-blur))
         saturate(var(--cursor-bg-saturate));
       transition:
         width var(--cursor-duration) ease,
@@ -399,8 +480,8 @@ function createStyle() {
         top var(--cursor-position-duration) ease,
         backdrop-filter var(--cursor-blur-duration) ease,
         transform var(--cursor-transform-duration) ease;
-      transform: 
-        translateX(calc(var(--cursor-translateX, 0px) - 50%)) 
+      transform:
+        translateX(calc(var(--cursor-translateX, 0px) - 50%))
         translateY(calc(var(--cursor-translateY, 0px) - 50%))
         scale(var(--cursor-scale, 1));
     }
@@ -610,6 +691,7 @@ function registerBlockNode(_node: Element) {
 
     const styleToUpdate: IpadCursorStyle = {
       ...updateStyleObj,
+      ...(isMouseDown ? config.blockDownStyle : []),
       ...extractCustomStyle(node),
     };
 
@@ -705,6 +787,7 @@ function applyTextCursor(sourceNode: HTMLElement) {
   updateCursorStyle(
     Utils.style2Vars({
       ...config.textStyle,
+      ...(isMouseDown ? config.textDownStyle : []),
       ...extractCustomStyle(sourceNode),
     })
   );
