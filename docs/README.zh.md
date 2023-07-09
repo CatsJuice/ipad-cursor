@@ -1,6 +1,9 @@
 <!-- Logo -->
 <p align="center">
-  <img src="https://cursor.oooo.so/ipad-cursor.svg"/>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://cursor.oooo.so/ipad-cursor-dark.svg">
+    <img height="100" src="https://cursor.oooo.so/ipad-cursor.svg">
+  </picture>
 </p>
 
 <!-- Bridge -->
@@ -20,6 +23,13 @@
     <img src="https://img.shields.io/badge/language_English-blue"/>
   </a>
 </p>
+
+<p align="center">
+  <a href="https://cursor.oooo.so">
+    <img src="../playground/public/screenshot.gif" />
+  </a>
+</p>
+
 
 ---
 
