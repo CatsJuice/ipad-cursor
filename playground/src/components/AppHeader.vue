@@ -14,18 +14,18 @@ const toggleDark = useToggle(isDark);
     py7
     px8
   >
-    <div data-cursor="block" p1 @click="toggleDark()">
+    <div rounded-10px data-cursor="block" p1 @click="toggleDark()">
       <div v-if="isDark" p0 icon-btn i-carbon:sun text-xl />
       <div v-else p0 icon-btn i-carbon:moon text-xl />
     </div>
 
-    <div data-cursor="block" p1>
+    <div rounded-10px data-cursor="block" p1>
       <a href="https://twitter.com/cats_juice" text-xl>
         <div p0 icon-btn i-carbon:logo-twitter />
       </a>
     </div>
 
-    <div data-cursor="block" p1>
+    <div rounded-10px data-cursor="block" p1>
       <a href="https://github.com/CatsJuice/ipad-cursor" text-xl>
         <div p0 icon-btn i-carbon:logo-github />
       </a>

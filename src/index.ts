@@ -187,7 +187,7 @@ class Utils {
   static isMergebleObject(obj: any) {
     const isObject = (o: any) =>
       o && typeof o === "object" && !Array.isArray(o);
-    return isObject(obj) && Object.keys(obj).length > 0;
+    return isObject(obj);
   }
   static mergeDeep<T extends any = any>(obj: T, ...sources: any[]): T {
     if (!sources.length) return obj;
@@ -242,7 +242,7 @@ function getDefaultConfig(): IpadCursorConfig {
     durationBase: "0.23s",
     durationBackdropFilter: "0.1s",
     backdropSaturate: "120%",
-    radius: "auto",
+    radius: "10px",
     scale: 1,
   };
   const defaultConfig: IpadCursorConfig = {
@@ -590,7 +590,7 @@ function registerBlockNode(_node: Element) {
     const updateStyleObj: IpadCursorStyle = { ...(config.blockStyle || {}) };
     const blockPadding = config.blockPadding || 0;
     let padding = blockPadding;
-    let radius = config.blockStyle?.radius;
+    let radius = updateStyleObj?.radius;
     if (padding === "auto") {
       const size = Math.min(rect.width, rect.height);
       padding = Math.max(2, Math.floor(size / 25));
