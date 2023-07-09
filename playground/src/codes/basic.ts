@@ -40,4 +40,23 @@ useCursor()
   </div>
 </template>`,
   },
+  {
+    lang: "react",
+    code: `// app.tsx
+import { IPadCursorProvider, useIPadCursor } from "ipad-cursor/react";
+import type { IpadCursorConfig } from "ipad-cursor";
+
+function App() {
+  const config: IpadCursorConfig = {};
+  useIPadCursor();
+
+  return (
+    <IPadCursorProvider config={config}>
+      <div data-cursor="block"></div>
+      <div data-cursor="text"></div>
+    </IPadCursorProvider>
+  )
+}
+`
+  }
 ];
