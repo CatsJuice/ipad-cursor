@@ -30,8 +30,10 @@ const useIPadCursorInit = (config?: IpadCursorConfig) => {
 const CursorContext = React.createContext<Partial<typeof CursorOutput>>({});
 export function IPadCursorProvider({
   children,
+  config,
 }: {
   children: React.ReactNode;
+  config?: IpadCursorConfig
 }) {
   const {
     CursorType,
@@ -40,7 +42,7 @@ export function IPadCursorProvider({
     updateCursor,
     updateConfig,
     customCursorStyle,
-  } = useIPadCursorInit();
+  } = useIPadCursorInit(config);
   return (
     <CursorContext.Provider
       value={{
