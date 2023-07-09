@@ -9,6 +9,9 @@ const isDark = useDark();
 const { updateConfig } = useCursor({
   enableAutoTextCursor: true,
   enableLighting: true,
+  normalStyle: {
+    scale: 1,
+  }
 });
 
 const appName = "ipad-cursor";
