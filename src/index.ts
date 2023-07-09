@@ -587,7 +587,7 @@ function registerBlockNode(_node: Element) {
     // for some edge case, two ele very close
     timer = setTimeout(() => toggleBlockActive(true));
     cursorEle && cursorEle.classList.add("block-active");
-    const updateStyleObj: IpadCursorStyle = { ...(config.blockStyle || {}) }
+    const updateStyleObj: IpadCursorStyle = { ...(config.blockStyle || {}) };
     const blockPadding = config.blockPadding || 0;
     let padding = blockPadding;
     let radius = config.blockStyle?.radius;
@@ -598,7 +598,8 @@ function registerBlockNode(_node: Element) {
     if (radius === "auto") {
       const paddingCss = Utils.getSize(padding);
       const nodeRadius = window.getComputedStyle(node).borderRadius;
-      radius = `calc(${paddingCss} + ${nodeRadius})`;
+      if (nodeRadius.startsWith("0") || nodeRadius === "none") radius = "0";
+      else radius = `calc(${paddingCss} + ${nodeRadius})`;
       updateStyleObj.radius = radius;
     }
 
