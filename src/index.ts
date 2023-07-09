@@ -4,7 +4,7 @@ export type ICursorType = "normal" | "text" | "block";
  *  if without unit, `px` is used by default
  */
 type MaybeSize = string | number;
-/** if without unit `ms` is used by defaut */
+/** if without unit `ms` is used by default */
 type MaybeDuration = string | number;
 /** do not use 0x000000, use #000000 instead */
 type MaybeColor = string;
@@ -29,17 +29,21 @@ export interface IpadCursorConfig {
   className?: string;
 
   /**
-   * The style of the cursor, when it not hover on any element
+   * The style of the cursor, when it does not hover on any element
    */
   normalStyle?: IpadCursorStyle;
   /**
-   * The style of the cursor, when it hover on text
+   * The style of the cursor, when it hovers on text
    */
   textStyle?: IpadCursorStyle;
   /**
-   * The style of the cursor, when it hover on block
+   * The style of the cursor, when it hovers on a block
    */
   blockStyle?: IpadCursorStyle;
+  /**
+   * The style of the cursor, when mousedown
+   */
+  mouseDownStyle?: IpadCursorStyle;
   /**
    * Cursor padding when hover on block
    */
@@ -54,9 +58,16 @@ export interface IpadCursorConfig {
    * whether to enable lighting effect
    */
   enableLighting?: boolean;
+
+  /**
+   * whether to apply effect for mousedown action
+   */
+  enableMouseDownEffect?: boolean;
 }
 /**
- * Configurable style of the cursor
+ * Configurable style of the cursor (Experimental)
+ * This feature is Experimental, so it's set to false by default.
+ * And it not support `block` yet
  */
 export interface IpadCursorStyle {
   /**
@@ -117,7 +128,10 @@ let ready = false;
 let cursorEle: HTMLDivElement | null = null;
 let isBlockActive = false;
 let isTextActive = false;
+let isMouseDown = false;
 let styleTag: HTMLStyleElement | null = null;
+let latestCursorStyle: Record<string, any> = {};
+let mousedownStyleRecover: Record<string, any> = {};
 const position = { x: 0, y: 0 };
 const isServer = typeof document === "undefined";
 const registeredNodeSet = new Set<Element>();
@@ -220,30 +234,36 @@ function getDefaultConfig(): IpadCursorConfig {
     durationPosition: "0s",
     durationBackdropFilter: "0s",
     background: "rgba(150, 150, 150, 0.2)",
+    scale: 1,
     border: "1px solid rgba(100, 100, 100, 0.1)",
     zIndex: 9999,
-    scale: 1,
     backdropBlur: "0px",
     backdropSaturate: "180%",
   };
+
   const textStyle: IpadCursorStyle = {
+    background: "rgba(100, 100, 100, 0.3)",
+    scale: 1,
     width: "4px",
     height: "1.2em",
     border: "0px solid rgba(100, 100, 100, 0)",
-    background: "rgba(100, 100, 100, 0.3)",
     durationBackdropFilter: "1s",
     radius: "10px",
-    scale: 1,
   };
+
   const blockStyle: IpadCursorStyle = {
-    background: "rgba(100, 100, 100, 0.1)",
+    background: "rgba(100, 100, 100, 0.3)",
     border: "1px solid rgba(100, 100, 100, 0.05)",
     backdropBlur: "0px",
     durationBase: "0.23s",
     durationBackdropFilter: "0.1s",
     backdropSaturate: "120%",
     radius: "10px",
-    scale: 1,
+  };
+
+  const mouseDownStyle: IpadCursorStyle = {
+    background: "rgba(150, 150, 150, 0.3)",
+    scale: 0.8,
   };
   const defaultConfig: IpadCursorConfig = {
     blockPadding: "auto",
@@ -252,6 +272,7 @@ function getDefaultConfig(): IpadCursorConfig {
     normalStyle,
     textStyle,
     blockStyle,
+    mouseDownStyle,
   };
   return defaultConfig;
 }
@@ -263,10 +284,12 @@ function updateCursorStyle(
 ) {
   if (!cursorEle) return;
   if (typeof keyOrObj === "string") {
+    latestCursorStyle[keyOrObj] = value;
     value && cursorEle.style.setProperty(keyOrObj, value);
   } else {
     Object.entries(keyOrObj).forEach(([key, value]) => {
       cursorEle && cursorEle.style.setProperty(key, value);
+      latestCursorStyle[key] = value;
     });
   }
 }
@@ -276,6 +299,23 @@ function onMousemove(e: MouseEvent) {
   position.x = e.clientX;
   position.y = e.clientY;
   autoApplyTextCursor(e.target as HTMLElement);
+}
+
+function onMousedown(e?: MouseEvent) {
+  if (isMouseDown || !config.enableMouseDownEffect || isBlockActive) return;
+  isMouseDown = true;
+  mousedownStyleRecover = { ...latestCursorStyle };
+  updateCursorStyle(Utils.style2Vars(config.mouseDownStyle || {}));
+}
+
+function onMouseup(e?: MouseEvent) {
+  if (!isMouseDown  || !config.enableMouseDownEffect || isBlockActive) return;
+  isMouseDown = false;
+  const target = mousedownStyleRecover;
+  const styleToRecover = Utils.objectKeys(
+    Utils.style2Vars(config.mouseDownStyle || {})
+  ).reduce((prev, curr) => ({ ...prev, [curr]: target[curr] }), {});
+  updateCursorStyle(styleToRecover);
 }
 
 /**
@@ -320,6 +360,8 @@ function initCursor(_config?: IpadCursorConfig) {
   if (_config) updateConfig(_config);
   ready = true;
   window.addEventListener("mousemove", onMousemove);
+  window.addEventListener("mousedown", onMousedown);
+  window.addEventListener("mouseup", onMouseup);
   window.addEventListener("scroll", scrollHandler);
   createCursor();
   createStyle();
@@ -386,8 +428,8 @@ function createStyle() {
       border: var(--cursor-border);
       z-index: var(--cursor-z-index);
       font-size: var(--cursor-font-size);
-      backdrop-filter: 
-        blur(var(--cursor-bg-blur)) 
+      backdrop-filter:
+        blur(var(--cursor-bg-blur))
         saturate(var(--cursor-bg-saturate));
       transition:
         width var(--cursor-duration) ease,
@@ -399,8 +441,8 @@ function createStyle() {
         top var(--cursor-position-duration) ease,
         backdrop-filter var(--cursor-blur-duration) ease,
         transform var(--cursor-transform-duration) ease;
-      transform: 
-        translateX(calc(var(--cursor-translateX, 0px) - 50%)) 
+      transform:
+        translateX(calc(var(--cursor-translateX, 0px) - 50%))
         translateY(calc(var(--cursor-translateY, 0px) - 50%))
         scale(var(--cursor-scale, 1));
     }
@@ -595,6 +637,7 @@ function registerBlockNode(_node: Element) {
       const size = Math.min(rect.width, rect.height);
       padding = Math.max(2, Math.floor(size / 25));
     }
+
     if (radius === "auto") {
       const paddingCss = Utils.getSize(padding);
       const nodeRadius = window.getComputedStyle(node).borderRadius;
