@@ -4,7 +4,7 @@ export type ICursorType = "normal" | "text" | "block";
  *  if without unit, `px` is used by default
  */
 type MaybeSize = string | number;
-/** if without unit `ms` is used by defaut */
+/** if without unit `ms` is used by default */
 type MaybeDuration = string | number;
 /** do not use 0x000000, use #000000 instead */
 type MaybeColor = string;
@@ -123,6 +123,8 @@ let isBlockActive = false;
 let isTextActive = false;
 let isMouseDown = false;
 let styleTag: HTMLStyleElement | null = null;
+let latestCursorStyle: Record<string, any> = {};
+let mousedownStyleRecover: Record<string, any> = {};
 const position = { x: 0, y: 0 };
 const isServer = typeof document === "undefined";
 const registeredNodeSet = new Set<Element>();
@@ -244,7 +246,6 @@ function getDefaultConfig(): IpadCursorConfig {
 
   const blockStyle: IpadCursorStyle = {
     background: "rgba(100, 100, 100, 0.3)",
-    scale: 0.95,
     border: "1px solid rgba(100, 100, 100, 0.05)",
     backdropBlur: "0px",
     durationBase: "0.23s",
@@ -276,10 +277,12 @@ function updateCursorStyle(
 ) {
   if (!cursorEle) return;
   if (typeof keyOrObj === "string") {
+    latestCursorStyle[keyOrObj] = value;
     value && cursorEle.style.setProperty(keyOrObj, value);
   } else {
     Object.entries(keyOrObj).forEach(([key, value]) => {
       cursorEle && cursorEle.style.setProperty(key, value);
+      latestCursorStyle[key] = value;
     });
   }
 }
@@ -294,28 +297,18 @@ function onMousemove(e: MouseEvent) {
 function onMousedown(e?: MouseEvent) {
   if (isMouseDown) return;
   isMouseDown = true;
+  mousedownStyleRecover = { ...latestCursorStyle };
   updateCursorStyle(Utils.style2Vars(config.mouseDownStyle || {}));
 }
 
 function onMouseup(e?: MouseEvent) {
   if (!isMouseDown) return;
   isMouseDown = false;
-  const target =
-    (isTextActive
-      ? config.textStyle
-      : isBlockActive
-      ? config.blockStyle
-      : config.normalStyle) || {};
-  const styleToRecover = Utils.objectKeys(config.mouseDownStyle || {}).reduce(
-    (prev, curr) => {
-      return {
-        ...prev,
-        [curr]: target[curr],
-      };
-    },
-    {}
-  );
-  updateCursorStyle(Utils.style2Vars(styleToRecover));
+  const target = mousedownStyleRecover;
+  const styleToRecover = Utils.objectKeys(
+    Utils.style2Vars(config.mouseDownStyle || {})
+  ).reduce((prev, curr) => ({ ...prev, [curr]: target[curr] }), {});
+  updateCursorStyle(styleToRecover);
 }
 
 /**
@@ -637,6 +630,7 @@ function registerBlockNode(_node: Element) {
       const size = Math.min(rect.width, rect.height);
       padding = Math.max(2, Math.floor(size / 25));
     }
+
     if (radius === "auto") {
       const paddingCss = Utils.getSize(padding);
       const nodeRadius = window.getComputedStyle(node).borderRadius;
