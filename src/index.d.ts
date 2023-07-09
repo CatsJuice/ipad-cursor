@@ -3,7 +3,7 @@ export type ICursorType = "normal" | "text" | "block";
  *  if without unit, `px` is used by default
  */
 type MaybeSize = string | number;
-/** if without unit `ms` is used by defaut */
+/** if without unit `ms` is used by default */
 type MaybeDuration = string | number;
 /** do not use 0x000000, use #000000 instead */
 type MaybeColor = string;
@@ -25,17 +25,21 @@ export interface IpadCursorConfig {
      */
     className?: string;
     /**
-     * The style of the cursor, when it not hover on any element
+     * The style of the cursor, when it does not hover on any element
      */
     normalStyle?: IpadCursorStyle;
     /**
-     * The style of the cursor, when it hover on text
+     * The style of the cursor, when it hovers on text
      */
     textStyle?: IpadCursorStyle;
     /**
-     * The style of the cursor, when it hover on block
+     * The style of the cursor, when it hovers on a block
      */
     blockStyle?: IpadCursorStyle;
+    /**
+     * The style of the cursor, when mousedown
+     */
+    mouseDownStyle?: IpadCursorStyle;
     /**
      * Cursor padding when hover on block
      */
@@ -48,9 +52,15 @@ export interface IpadCursorConfig {
      * whether to enable lighting effect
      */
     enableLighting?: boolean;
+    /**
+     * whether to apply effect for mousedown action
+     */
+    enableMouseDownEffect?: boolean;
 }
 /**
- * Configurable style of the cursor
+ * Configurable style of the cursor (Experimental)
+ * This feature is Experimental, so it's set to false by default.
+ * And it not support `block` yet
  */
 export interface IpadCursorStyle {
     /**

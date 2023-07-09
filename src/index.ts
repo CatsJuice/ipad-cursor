@@ -301,14 +301,14 @@ function onMousemove(e: MouseEvent) {
   autoApplyTextCursor(e.target as HTMLElement);
 }
 
-function onMousedown(e?: MouseEvent) {
+function onMousedown() {
   if (isMouseDown || !config.enableMouseDownEffect || isBlockActive) return;
   isMouseDown = true;
   mousedownStyleRecover = { ...latestCursorStyle };
   updateCursorStyle(Utils.style2Vars(config.mouseDownStyle || {}));
 }
 
-function onMouseup(e?: MouseEvent) {
+function onMouseup() {
   if (!isMouseDown  || !config.enableMouseDownEffect || isBlockActive) return;
   isMouseDown = false;
   const target = mousedownStyleRecover;

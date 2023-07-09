@@ -58,6 +58,24 @@ async function vueBuild() {
   await writeFile(resolve(rootDir, "dist/vue/index.mjs"), raw);
 }
 
+async function reactBuild() {
+  info("Rolling up React package");
+  await execa("npx", [
+    "rollup",
+    "-c",
+    "rollup.config.js",
+    "--environment",
+    "FRAMEWORK:react",
+  ]);
+  /**
+   * This is a super hack — for some reason these imports need to be explicitly
+   * to .mjs files so...we make it so.
+   */
+  let raw = await readFile(resolve(rootDir, "dist/react/index.mjs"), "utf8");
+  raw = raw.replace("from '../index'", "from '../index.mjs'");
+  await writeFile(resolve(rootDir, "dist/react/index.mjs"), raw);
+}
+
 async function declarationsBuild() {
   info("Outputting declarations");
   await execa("npx", [
@@ -174,6 +192,7 @@ await clean();
 await baseBuild();
 await baseBuildMin();
 await vueBuild();
+await reactBuild();
 await declarationsBuild();
 await bundleDeclarations();
 await addPackageJSON();
