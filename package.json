@@ -20,12 +20,13 @@
       "default": "./vue/index.mjs"
     },
     "./react": {
-      "import": "./vue/index.mjs",
-      "types": "./vue/index.d.ts",
-      "default": "./vue/index.mjs"
+      "import": "./react/index.mjs",
+      "types": "./react/index.d.ts",
+      "default": "./react/index.mjs"
     },
     ".": {
       "import": "./index.mjs",
+      "types": "./index.d.ts",
       "default": "./index.mjs"
     }
   },
