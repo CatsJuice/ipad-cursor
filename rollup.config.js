@@ -5,7 +5,7 @@ const FRAMEWORK = process.env.FRAMEWORK || "index";
 const DECLARATIONS = process.env.DECLARATIONS || false;
 const MIN = process.env.MIN || false;
 
-const external = ["vue"];
+const external = ["vue", "react", "react-dom"];
 
 function createOutput() {
   if (DECLARATIONS) {
