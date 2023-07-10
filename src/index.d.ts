@@ -138,6 +138,7 @@ declare function updateCursor(): void;
  * @param style
  */
 declare function customCursorStyle(style: IpadCursorStyle & Record<string, any>): string;
+declare function resetCursor(): void;
 declare const CursorType: {
     TEXT: ICursorType;
     BLOCK: ICursorType;
@@ -147,11 +148,12 @@ declare const exported: {
         TEXT: ICursorType;
         BLOCK: ICursorType;
     };
+    resetCursor: typeof resetCursor;
     initCursor: typeof initCursor;
     updateCursor: typeof updateCursor;
     disposeCursor: typeof disposeCursor;
     updateConfig: typeof updateConfig;
     customCursorStyle: typeof customCursorStyle;
 };
-export { CursorType, initCursor, updateCursor, disposeCursor, updateConfig, customCursorStyle, };
+export { CursorType, resetCursor, initCursor, updateCursor, disposeCursor, updateConfig, customCursorStyle, };
 export default exported;
