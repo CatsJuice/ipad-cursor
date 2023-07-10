@@ -156,16 +156,18 @@ When mouse enter the element, apply styles.
 
 It is recommended to see [index.d.ts](./src/index.d.ts) in the npm package.
 
-| Name                              | Type              | Default             | Description                                                                            | required |
-| --------------------------------- | ----------------- | ------------------- | -------------------------------------------------------------------------------------- | -------- |
-| `adsorptionStrength`              | `number`          | `0.2`               | The strength of adsorption effect, number between 0 and 30                             | No       |
-| `className`                       | `string`          | `'ipad-cursor'`     | The class name of fake cursor                                                          | No       |
-| `blockPadding`                    | `number`          | `auto`              | The padding of cursor when hover on block, set to `auto` will calculate  automatic     | No       |
-| `enableAutoTextCursor`(`v0.2.0+`) | `boolean`         | `false`             | Auto detect text cursor, see [#12](https://github.com/CatsJuice/ipad-cursor/pull/12)   | No       |
-| `enableLighting`(`v0.3.0+`)       | `boolean`         | `false`             | Add a lighting effect to block [#14](https://github.com/CatsJuice/ipad-cursor/pull/14) | No       |
-| `normalStyle`                     | `IpadCursorStyle` | see [Style](#style) | The style of normal cursor, see [Style](#style)                                        | No       |
-| `textStyle`                       | `IpadCursorStyle` | see [Style](#style) | The style of text cursor, see [Style](#style)                                          | No       |
-| `blockStyle`                      | `IpadCursorStyle` | see [Style](#style) | The style of block cursor, see [Style](#style)                                         | No       |
+| Name                                              | Type              | Default             | Description                                                                            | required |
+| ------------------------------------------------- | ----------------- | ------------------- | -------------------------------------------------------------------------------------- | -------- |
+| `adsorptionStrength`                              | `number`          | `0.2`               | The strength of adsorption effect, number between 0 and 30                             | No       |
+| `className`                                       | `string`          | `'ipad-cursor'`     | The class name of fake cursor                                                          | No       |
+| `blockPadding`                                    | `number`          | `auto`              | The padding of cursor when hover on block, set to `auto` will calculate  automatic     | No       |
+| `enableAutoTextCursor`(`v0.2.0+`)                 | `boolean`         | `false`             | Auto detect text cursor, see [#12](https://github.com/CatsJuice/ipad-cursor/pull/12)   | No       |
+| `enableLighting`(`v0.3.0+`)                       | `boolean`         | `false`             | Add a lighting effect to block [#14](https://github.com/CatsJuice/ipad-cursor/pull/14) | No       |
+| `enableMouseDownEffect`(`v0.4.3+`,  Experimental) | `boolean`         | `false`             | Add a effect when mouse down, customize style by config `mouseDownStyle`               | No       |
+| `normalStyle`                                     | `IpadCursorStyle` | see [Style](#style) | The style of normal cursor, see [Style](#style)                                        | No       |
+| `textStyle`                                       | `IpadCursorStyle` | see [Style](#style) | The style of text cursor, see [Style](#style)                                          | No       |
+| `blockStyle`                                      | `IpadCursorStyle` | see [Style](#style) | The style of block cursor, see [Style](#style)                                         | No       |
+| `mouseDownStyle`(`v0.4.3+`, Experimental)         | `IpadCursorStyle` | see [Style](#style) | The style of cursor when mouse is pressed, see [Style](#style)                         | No       |
 
 ## Style
 

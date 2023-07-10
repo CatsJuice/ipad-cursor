@@ -154,16 +154,18 @@
 
 建议查看 npm 包中的 [index.d.ts](./src/index.d.ts)。
 
-| 名称                              | 类型              | 默认值               | 描述                                                                               | 是否必须 |
-| --------------------------------- | ----------------- | -------------------- | ---------------------------------------------------------------------------------- | -------- |
-| `adsorptionStrength`              | `number`          | `0.2`                | 吸附力强度                                                                         | No       |
-| `className`                       | `string`          | `'ipad-cursor'`      | 光标的css类名                                                                      | No       |
-| `blockPadding`                    | `number`          | `auto`               | 当光标聚焦在 `block` 时的内边距，设置为 `auto` 将自动计算                          | No       |
-| `enableAutoTextCursor`(`v0.2.0+`) | `boolean`         | `false`              | 自动检测 `text` 类型的光标 [#12](https://github.com/CatsJuice/ipad-cursor/pull/12) | No       |
-| `enableLighting`(`v0.3.0+`)       | `boolean`         | `false`              | 给 `block` 增加光照效果 [#14](https://github.com/CatsJuice/ipad-cursor/pull/14)    | No       |
-| `normalStyle`                     | `IpadCursorStyle` | 请查看 [样式](#样式) | 正常情况下的光标样式, see [Style](#style)                                          | No       |
-| `textStyle`                       | `IpadCursorStyle` | 请查看 [样式](#样式) | 文字模式下的光标样式, see [Style](#style)                                          | No       |
-| `blockStyle`                      | `IpadCursorStyle` | 请查看 [样式](#样式) | 块元素下的光标样式, see [Style](#style)                                            | No       |
+| 名称                                        | 类型              | 默认值               | 描述                                                                               | 是否必须 |
+| ------------------------------------------- | ----------------- | -------------------- | ---------------------------------------------------------------------------------- | -------- |
+| `adsorptionStrength`                        | `number`          | `0.2`                | 吸附力强度                                                                         | No       |
+| `className`                                 | `string`          | `'ipad-cursor'`      | 光标的css类名                                                                      | No       |
+| `blockPadding`                              | `number`          | `auto`               | 当光标聚焦在 `block` 时的内边距，设置为 `auto` 将自动计算                          | No       |
+| `enableAutoTextCursor`(`v0.2.0+`)           | `boolean`         | `false`              | 自动检测 `text` 类型的光标 [#12](https://github.com/CatsJuice/ipad-cursor/pull/12) | No       |
+| `enableLighting`(`v0.3.0+`)                 | `boolean`         | `false`              | 给 `block` 增加光照效果 [#14](https://github.com/CatsJuice/ipad-cursor/pull/14)    | No       |
+| `enableMouseDownEffect`(`v0.4.3+`,  实验性) | `boolean`         | `false`              | 当鼠标按下时应用样式， 通过配置 `mouseDownStyle` 来自定义样式                      | No       |
+| `normalStyle`                               | `IpadCursorStyle` | 请查看 [样式](#样式) | 正常情况下的光标样式, 请查看 [样式](#样式)                                         | No       |
+| `textStyle`                                 | `IpadCursorStyle` | 请查看 [样式](#样式) | 文字模式下的光标样式, 请查看 [样式](#样式)                                         | No       |
+| `blockStyle`                                | `IpadCursorStyle` | 请查看 [样式](#样式) | 块元素下的光标样式, 请查看 [样式](#样式)                                           | No       |
+| `mouseDownStyle`(`v0.4.3+`, 实验性)         | `IpadCursorStyle` | 请查看 [样式](#样式) | 鼠标按下时的光标样式, 请查看 [样式](#样式)                                         | No       |
 
 
 ## 样式
