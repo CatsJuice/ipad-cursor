@@ -106,6 +106,7 @@ async function bundleDeclarations() {
   ]);
   await execa("shx", ["rm", "-rf", `${rootDir}/dist/src`]);
   await execa("shx", ["rm", `${rootDir}/dist/index.js`]);
+  await execa("pnpm", ["build:react-ts"]);
 }
 
 async function addPackageJSON() {
