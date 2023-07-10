@@ -1,6 +1,7 @@
-import { onMounted, onBeforeUnmount } from "vue";
+import { onMounted, nextTick, onUnmounted } from "vue";
 import {
   CursorType,
+  resetCursor,
   initCursor,
   updateCursor,
   disposeCursor,
@@ -17,11 +18,12 @@ export const ipadCursorPlugin = {
 
 export function useCursor(config?: IpadCursorConfig) {
   onMounted(() => updateCursor());
-  onBeforeUnmount(() => updateCursor());
+  onUnmounted(() => updateCursor());
   config && updateConfig(config);
   initCursor();
   return {
     CursorType,
+    resetCursor,
     disposeCursor,
     initCursor,
     updateCursor,

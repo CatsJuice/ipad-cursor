@@ -6,6 +6,7 @@ import {
   disposeCursor,
   IpadCursorConfig,
   updateConfig,
+  resetCursor,
   customCursorStyle,
 } from "..";
 import type * as CursorOutput from "..";
@@ -19,6 +20,7 @@ const useIPadCursorInit = (config?: IpadCursorConfig) => {
   }, [config]);
   return {
     CursorType,
+    resetCursor,
     disposeCursor,
     initCursor,
     updateCursor,
@@ -37,6 +39,7 @@ export function IPadCursorProvider({
 }) {
   const {
     CursorType,
+    resetCursor,
     disposeCursor,
     initCursor,
     updateCursor,
@@ -47,6 +50,7 @@ export function IPadCursorProvider({
     <CursorContext.Provider
       value={{
         CursorType,
+        resetCursor,
         disposeCursor,
         initCursor,
         updateCursor,
