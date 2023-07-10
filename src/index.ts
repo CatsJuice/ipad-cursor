@@ -126,6 +126,7 @@ export interface IpadCursorStyle {
 
 let ready = false;
 let cursorEle: HTMLDivElement | null = null;
+let activeDom: Element | null = null;
 let isBlockActive = false;
 let isTextActive = false;
 let isMouseDown = false;
@@ -309,7 +310,7 @@ function onMousedown() {
 }
 
 function onMouseup() {
-  if (!isMouseDown  || !config.enableMouseDownEffect || isBlockActive) return;
+  if (!isMouseDown || !config.enableMouseDownEffect || isBlockActive) return;
   isMouseDown = false;
   const target = mousedownStyleRecover;
   const styleToRecover = Utils.objectKeys(
@@ -545,6 +546,8 @@ function registerNode(node: Element) {
 function unregisterNode(node: Element) {
   registeredNodeSet.delete(node);
   eventMap.get(node)?.forEach(({ event, handler }: any) => {
+    if (event === 'mouseleave') 
+      handler();
     node.removeEventListener(event, handler);
   });
   eventMap.delete(node);
@@ -617,6 +620,7 @@ function registerBlockNode(_node: Element) {
       (active
         ? cursorEle.classList.add("block-active")
         : cursorEle.classList.remove("block-active"));
+    activeDom = active ? node : null;
   }
 
   function onBlockEnter() {
@@ -762,6 +766,13 @@ function customCursorStyle(style: IpadCursorStyle & Record<string, any>) {
     .map(([key, value]) => `${key}: ${value}`)
     .join("; ");
 }
+
+function resetCursor() {
+  isBlockActive = false;
+  isTextActive = false;
+  resetCursorStyle();
+}
+
 const CursorType = {
   TEXT: "text" as ICursorType,
   BLOCK: "block" as ICursorType,
@@ -769,6 +780,7 @@ const CursorType = {
 
 const exported = {
   CursorType,
+  resetCursor,
   initCursor,
   updateCursor,
   disposeCursor,
@@ -777,6 +789,7 @@ const exported = {
 };
 export {
   CursorType,
+  resetCursor,
   initCursor,
   updateCursor,
   disposeCursor,
