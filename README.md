@@ -152,6 +152,9 @@ When mouse enter the element, apply styles.
   Create style string that can be used as `data-cursor-style` attribute.
   This method is used for better type hinting.
 
+### resetCursor
+  Reset cursor to default style.
+
 ## Config
 
 It is recommended to see [index.d.ts](./src/index.d.ts) in the npm package.

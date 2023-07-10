@@ -150,6 +150,9 @@
   创建可用作 `data-cursor-style` 属性的样式字符串。
   这个方法用于更好的类型提示。
 
+### resetCursor
+  将光标重置为默认样式。
+
 ## 配置
 
 建议查看 npm 包中的 [index.d.ts](./src/index.d.ts)。
