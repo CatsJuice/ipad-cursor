@@ -1,12 +1,13 @@
 {
   "name": "ipad-cursor",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Mouse effect of iPad in browser that can be used in any framework",
   "scripts": {
     "dev": "cd ./playground && vite",
     "build": "node ./.build.mjs",
     "build:playground": "cd ./playground && vite-ssg build -c ./vite.config.ts",
-    "publish": "node ./.build.mjs --publish"
+    "publish": "node ./.build.mjs --publish",
+    "build:react-ts": "cd ./src/react && tsc"
   },
   "type": "module",
   "main": "index.mjs",
