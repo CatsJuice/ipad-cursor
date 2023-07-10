@@ -3,8 +3,8 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
-import { IPadCursorProvider, useIPadCursor } from "../../../dist/react";
-import { IpadCursorConfig } from "../../../dist/index";
+import { IPadCursorProvider, useIPadCursor } from "ipad-cursor/react";
+import { IpadCursorConfig } from "ipad-cursor";
 
 function App() {
   const config: IpadCursorConfig = {

@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  ipad-cursor:
+    specifier: 0.4.3
+    version: registry.npmmirror.com/ipad-cursor@0.4.3
   react:
     specifier: ^18.2.0
     version: registry.npmmirror.com/react@18.2.0
@@ -2041,6 +2044,12 @@ packages:
     name: inherits
     version: 2.0.4
     dev: true
+
+  registry.npmmirror.com/ipad-cursor@0.4.3:
+    resolution: {integrity: sha512-a5x0GysyTLjJuQOwEPOIpCm+AxAyAC14BdNfhNA7UprFG4nIascS3f9NeOWdSWImGpVL9KAWzGhmlS2t4VsNqg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ipad-cursor/-/ipad-cursor-0.4.3.tgz}
+    name: ipad-cursor
+    version: 0.4.3
+    dev: false
 
   registry.npmmirror.com/is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/is-binary-path/-/is-binary-path-2.1.0.tgz}
