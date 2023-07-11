@@ -1,68 +1,54 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect, useRef } from 'react'
+import type * as CursorOutput from '..'
 import {
   CursorType,
-  initCursor,
-  updateCursor,
-  disposeCursor,
   IpadCursorConfig,
-  updateConfig,
-  resetCursor,
   customCursorStyle,
-} from "..";
-import type * as CursorOutput from "..";
+  disposeCursor,
+  initCursor,
+  resetCursor,
+  updateConfig,
+  updateCursor,
+} from '..'
 
 const useIPadCursorInit = (config?: IpadCursorConfig) => {
-  useEffect(() => {
-    initCursor(config);
+  useLayoutEffect(() => {
+    initCursor(config)
     return () => {
-      disposeCursor();
-    };
-  }, [config]);
-  return {
-    CursorType,
-    resetCursor,
-    disposeCursor,
-    initCursor,
-    updateCursor,
-    updateConfig,
-    customCursorStyle,
-  };
-};
+      disposeCursor()
+    }
+  }, [config])
+  return null
+}
 
-const CursorContext = React.createContext<Partial<typeof CursorOutput>>({});
+const CursorContext = React.createContext<Partial<typeof CursorOutput>>({})
 export function IPadCursorProvider({
   children,
   config,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
   config?: IpadCursorConfig
 }) {
-  const {
-    CursorType,
-    resetCursor,
-    disposeCursor,
-    initCursor,
-    updateCursor,
-    updateConfig,
-    customCursorStyle,
-  } = useIPadCursorInit(config);
+  useIPadCursorInit(config)
   return (
     <CursorContext.Provider
-      value={{
-        CursorType,
-        resetCursor,
-        disposeCursor,
-        initCursor,
-        updateCursor,
-        updateConfig,
-        customCursorStyle,
-      }}
+      value={
+        useRef({
+          CursorType,
+          resetCursor,
+          disposeCursor,
+          initCursor,
+          updateCursor,
+          updateConfig,
+          customCursorStyle,
+        }).current
+      }
     >
       {children}
     </CursorContext.Provider>
-  );
+  )
 }
 
 export function useIPadCursor() {
-  return React.useContext(CursorContext);
+  return React.useContext(CursorContext)
 }

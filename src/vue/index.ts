@@ -1,4 +1,4 @@
-import { onMounted, nextTick, onUnmounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import {
   CursorType,
   resetCursor,
