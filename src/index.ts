@@ -627,6 +627,10 @@ function registerBlockNode(_node: Element) {
     // TODO: maybe control this in other way
     cursorEle &&
       cursorEle.classList.toggle("lighting--on", !!config.enableLighting);
+    
+    // Prevents the cursor from shifting from the node during rapid enter/leave.
+    toggleNodeTransition(false);
+    
     const rect = node.getBoundingClientRect();
     timer && clearTimeout(timer);
     toggleBlockActive(true);
