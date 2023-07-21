@@ -7,7 +7,7 @@
 </p>
 
 <!-- Bridge -->
-<h2 align="center">ipad-mouse </h2>
+<h2 align="center">ipad-curosr </h2>
 <!-- Description -->
 <p align="center">
   Mouse effect hacking of iPad in browser that can be used in any frameworks 
