@@ -55,6 +55,10 @@ export interface IpadCursorConfig {
   enableAutoTextCursor?: boolean;
 
   /**
+   * enable detect dom change and auto call updateCursor
+   **/
+  enableAutoUpdateCursor?: boolean;
+  /**
    * whether to enable lighting effect
    */
   enableLighting?: boolean;
@@ -125,6 +129,7 @@ export interface IpadCursorStyle {
 }
 
 let ready = false;
+let observer: MutationObserver | null = null;
 let cursorEle: HTMLDivElement | null = null;
 let activeDom: Element | null = null;
 let isBlockActive = false;
@@ -368,6 +373,16 @@ function initCursor(_config?: IpadCursorConfig) {
   createStyle();
   updateCursorPosition();
   updateCursor();
+  createObserver();
+}
+
+function createObserver() {
+  if (config.enableAutoUpdateCursor) {
+    observer = new MutationObserver(function () {
+      updateCursor();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
 }
 
 /**
@@ -386,6 +401,7 @@ function disposeCursor() {
 
   // iterate nodesMap
   registeredNodeSet.forEach((node) => unregisterNode(node));
+  observer?.disconnect()
 }
 
 /**
@@ -546,7 +562,7 @@ function registerNode(node: Element) {
 function unregisterNode(node: Element) {
   registeredNodeSet.delete(node);
   eventMap.get(node)?.forEach(({ event, handler }: any) => {
-    if (event === 'mouseleave') 
+    if (event === 'mouseleave')
       handler();
     node.removeEventListener(event, handler);
   });
@@ -720,11 +736,11 @@ function registerBlockNode(_node: Element) {
   function toggleNodeTransition(enable?: boolean) {
     const duration = enable
       ? Utils.getDuration(
-          config?.blockStyle?.durationPosition ??
-            config?.blockStyle?.durationBase ??
-            config?.normalStyle?.durationBase ??
-            "0.23s"
-        )
+        config?.blockStyle?.durationPosition ??
+        config?.blockStyle?.durationBase ??
+        config?.normalStyle?.durationBase ??
+        "0.23s"
+      )
       : "";
     node.style.setProperty(
       "transition",
