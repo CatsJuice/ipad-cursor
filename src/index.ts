@@ -411,7 +411,7 @@ function disposeCursor() {
 function updateConfig(_config: IpadCursorConfig) {
   if ("adsorptionStrength" in _config) {
     config.adsorptionStrength = Utils.clamp(
-      _config.adsorptionStrength || 10,
+      _config.adsorptionStrength ?? 10,
       0,
       30
     );
@@ -650,7 +650,7 @@ function registerBlockNode(_node: Element) {
     timer = setTimeout(() => toggleBlockActive(true));
     cursorEle && cursorEle.classList.add("block-active");
     const updateStyleObj: IpadCursorStyle = { ...(config.blockStyle || {}) };
-    const blockPadding = config.blockPadding || 0;
+    const blockPadding = config.blockPadding ?? 0;
     let padding = blockPadding;
     let radius = updateStyleObj?.radius;
     if (padding === "auto") {
@@ -699,7 +699,7 @@ function registerBlockNode(_node: Element) {
     const halfWidth = rect.width / 2;
     const leftOffset = (position.x - rect.left - halfWidth) / halfWidth;
 
-    const strength = config.adsorptionStrength || 10;
+    const strength = config.adsorptionStrength ?? 10;
     updateCursorStyle(
       "--cursor-translateX",
       `${leftOffset * ((rect.width / 100) * strength)}px`
