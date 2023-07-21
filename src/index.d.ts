@@ -49,6 +49,10 @@ export interface IpadCursorConfig {
      **/
     enableAutoTextCursor?: boolean;
     /**
+     * enable detect dom change and auto call updateCursor
+     **/
+    enableAutoUpdateCursor?: boolean;
+    /**
      * whether to enable lighting effect
      */
     enableLighting?: boolean;

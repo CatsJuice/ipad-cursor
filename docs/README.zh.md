@@ -165,6 +165,7 @@
 | `enableAutoTextCursor`(`v0.2.0+`)           | `boolean`         | `false`              | 自动检测 `text` 类型的光标 [#12](https://github.com/CatsJuice/ipad-cursor/pull/12) | No       |
 | `enableLighting`(`v0.3.0+`)                 | `boolean`         | `false`              | 给 `block` 增加光照效果 [#14](https://github.com/CatsJuice/ipad-cursor/pull/14)    | No       |
 | `enableMouseDownEffect`(`v0.4.3+`,  实验性) | `boolean`         | `false`              | 当鼠标按下时应用样式， 通过配置 `mouseDownStyle` 来自定义样式                      | No       |
+| `enableAutoUpdateCursor`(`v0.5.0+`)         | `boolean`         | `false`              | 当 dom 更新时自动更更新光标的扫描                                                  | No       |
 | `normalStyle`                               | `IpadCursorStyle` | 请查看 [样式](#样式) | 正常情况下的光标样式, 请查看 [样式](#样式)                                         | No       |
 | `textStyle`                                 | `IpadCursorStyle` | 请查看 [样式](#样式) | 文字模式下的光标样式, 请查看 [样式](#样式)                                         | No       |
 | `blockStyle`                                | `IpadCursorStyle` | 请查看 [样式](#样式) | 块元素下的光标样式, 请查看 [样式](#样式)                                           | No       |
@@ -198,7 +199,7 @@
 - [x] 添加中文文档
 - [x] API 文档
 - [ ] 更多示例
-- [ ] 自动检测 dom 更新，并自动调用 `updateCursor`
+- [x] 自动检测 dom 更新，并自动调用 `updateCursor`
     - 可能会使用 [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver)
 
 

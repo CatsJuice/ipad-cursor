@@ -167,6 +167,7 @@ It is recommended to see [index.d.ts](./src/index.d.ts) in the npm package.
 | `enableAutoTextCursor`(`v0.2.0+`)                 | `boolean`         | `false`             | Auto detect text cursor, see [#12](https://github.com/CatsJuice/ipad-cursor/pull/12)   | No       |
 | `enableLighting`(`v0.3.0+`)                       | `boolean`         | `false`             | Add a lighting effect to block [#14](https://github.com/CatsJuice/ipad-cursor/pull/14) | No       |
 | `enableMouseDownEffect`(`v0.4.3+`,  Experimental) | `boolean`         | `false`             | Add a effect when mouse down, customize style by config `mouseDownStyle`               | No       |
+| `enableAutoUpdateCursor`(`v0.5.0+`)               | `boolean`         | `false`             | Auto update cursor when dom updated                                                    | No       |
 | `normalStyle`                                     | `IpadCursorStyle` | see [Style](#style) | The style of normal cursor, see [Style](#style)                                        | No       |
 | `textStyle`                                       | `IpadCursorStyle` | see [Style](#style) | The style of text cursor, see [Style](#style)                                          | No       |
 | `blockStyle`                                      | `IpadCursorStyle` | see [Style](#style) | The style of block cursor, see [Style](#style)                                         | No       |
@@ -199,7 +200,7 @@ See `getDefaultConfig` method in [index.ts](./src/index.ts) for more details.
 - [x] Add Chinese document
 - [x] API Docs
 - [ ] More examples
-- [ ] Auto detect dom update, and call `updateCursor` automatically
+- [x] Auto detect dom update, and call `updateCursor` automatically
     - Maybe use [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver)
 
 
