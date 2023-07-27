@@ -122,6 +122,25 @@
 
   查看 [样式](#样式) 浏览完整的样式列表
 
+### 在框架中使用
+
+- [Vue.js](https://vuejs.org/)
+  - hooks
+    你可以通过使用 `useCursor` hook， 当组件挂载和销毁时自动调用 `updateCursor()`
+    ```ts
+    <script setup>
+    import { useCursor } from "ipad-cursor/vue"
+
+    useCursor()
+    </script>
+    ```
+  - directive (⚠️ 尚未实现)
+- [React](https://react.dev)
+  可参考 [App.tsx](./examples/react-basic/src/App.tsx)
+- [Hexo](https://hexo.io/zh-cn/)
+  可参考 [@zqqcee](https://github.com/zqqcee)'s [Blog](https://zqqcee.github.io/2023/07/23/ebae3e5deab8/)
+
+
 ## 原理
 
 当调用 `initCursor` 时，它将移除默认光标，并使用 `div` 元素生成一个假光标。然后监听 `mousemove` 事件，并将假光标移动到鼠标位置。

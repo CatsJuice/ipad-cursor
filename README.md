@@ -123,6 +123,24 @@
 
   See [Style](#style) for full style list.
 
+### Use in framework
+
+- [Vue.js](https://vuejs.org/)
+  - hooks
+    You can use `useCursor` hook to call `updateCursor()` automatically on mounted and unmounted.
+    ```ts
+    <script setup>
+    import { useCursor } from "ipad-cursor/vue"
+
+    useCursor()
+    </script>
+    ```
+  - directive (⚠️ not implemented yet)
+- [React](https://react.dev)
+  See [App.tsx](./examples/react-basic/src/App.tsx)
+- [Hexo](https://hexo.io/)
+  See [@zqqcee](https://github.com/zqqcee)'s [Blog](https://zqqcee.github.io/2023/07/23/ebae3e5deab8/)
+
 ## Principle
 
 When `initCursor` called, it will remove default cursor, and generate a fake cursor use `div` element. Then listen `mousemove` event, and move the fake cursor to the mouse position.
