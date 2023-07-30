@@ -126,7 +126,8 @@
 ### Use in framework
 
 - [Vue.js](https://vuejs.org/)
-  - hooks
+  - **hooks**
+
     You can use `useCursor` hook to call `updateCursor()` automatically on mounted and unmounted.
     ```ts
     <script setup>
@@ -135,7 +136,26 @@
     useCursor()
     </script>
     ```
-  - directive (⚠️ not implemented yet)
+  - **directive**
+
+    Register plugin globally
+    ```ts
+    // src/main.ts
+    import { ipadCursorPlugin } from "ipad-cursor/vue"
+
+    app.use(ipadCursorPlugin, {
+      // global configurations
+      blockStyle: { radius: "auto" }
+    })
+    ```
+
+    Use in component
+    ```html
+    <div v-cursor-block />
+    <div v-cursor-text />
+    <div v-cursor-block="{ background: 'red' }" />
+    ```
+
 - [React](https://react.dev)
   See [App.tsx](./examples/react-basic/src/App.tsx)
 - [Hexo](https://hexo.io/)

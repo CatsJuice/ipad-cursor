@@ -125,7 +125,8 @@
 ### 在框架中使用
 
 - [Vue.js](https://vuejs.org/)
-  - hooks
+  - **hooks**
+
     你可以通过使用 `useCursor` hook， 当组件挂载和销毁时自动调用 `updateCursor()`
     ```ts
     <script setup>
@@ -134,7 +135,26 @@
     useCursor()
     </script>
     ```
-  - directive (⚠️ 尚未实现)
+  - **自定义指令**
+
+    全局注册插件：
+    ```ts
+    // src/main.ts
+    import { ipadCursorPlugin } from "ipad-cursor/vue"
+
+    app.use(ipadCursorPlugin, {
+      // global configurations
+      blockStyle: { radius: "auto" }
+    })
+    ```
+
+    然后就可以在组件中使用：
+    ```html
+    <div v-cursor-block />
+    <div v-cursor-text />
+    <div v-cursor-block="{ background: 'red' }" />
+    ```
+    
 - [React](https://react.dev)
   可参考 [App.tsx](./examples/react-basic/src/App.tsx)
 - [Hexo](https://hexo.io/zh-cn/)
