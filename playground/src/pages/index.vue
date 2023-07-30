@@ -13,10 +13,8 @@ import { customAnimeSpeedCodes } from "../codes/custom-anime-speed";
 import { useDark } from "@vueuse/core";
 
 const isDark = useDark();
-const { CursorType, customCursorStyle, initCursor, disposeCursor } = useCursor({
-  normalStyle: {
-    backdropBlur: 12,
-  },
+const { customCursorStyle, initCursor, disposeCursor } = useCursor({
+  normalStyle: { backdropBlur: 12 },
 });
 
 const btns = [
@@ -76,7 +74,7 @@ const showCodes = computed(() => {
         <div
           w-100px
           h-100px
-          :data-cursor="CursorType.BLOCK"
+          v-cursor-block
           rounded-26px
         >
           <img w-full h-full :src="isDark ? '/ipad-cursor-dark.svg' : '/ipad-cursor.svg'" />
@@ -87,11 +85,7 @@ const showCodes = computed(() => {
           <h2
             my-0
             mt-2
-            :data-cursor-style="
-              customCursorStyle({
-                background: 'currentColor',
-              })
-            "
+            v-cursor-text="{ background: 'currentColor' }"
           >
             iPad Cursor
           </h2>
@@ -111,11 +105,10 @@ const showCodes = computed(() => {
           <!-- btns -->
           <div flex="~ gap-2 wrap" justify-center items-center pt4>
             <div
-              :data-cursor="CursorType.BLOCK"
               class="btn"
               v-for="btn in btns"
               :key="btn.label"
-              :data-cursor-style="btn.style"
+              v-cursor-block="btn.style"
               :class="
                 activeBtn === btn.label ? ['outline'] : ['border-transparent']
               "
@@ -128,7 +121,7 @@ const showCodes = computed(() => {
           <!-- actions -->
           <div flex="~ gap-1 wrap" flex-center pt10>
             <div
-              :data-cursor="CursorType.BLOCK"
+              v-cursor-block
               class="btn"
               @click="disposeCursor()"
             >
@@ -136,7 +129,7 @@ const showCodes = computed(() => {
             </div>
   
             <div
-              :data-cursor="CursorType.BLOCK"
+              v-cursor-block
               class="btn"
               @click="initCursor()"
             >
