@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import useCursor from './composables/cursor'
 import { appName } from '~/constants'
 
 useHead({
   title: appName,
 })
 
-useCursor({
-  blockStyle: {
-    radius: 'auto',
-  },
-})
+// use ipad cursor by hooks
+// useCursor({
+//   blockStyle: {
+//     radius: 'auto',
+//   },
+// })
 </script>
 
 <template>

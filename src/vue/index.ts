@@ -13,7 +13,7 @@ import {
 } from "..";
 
 export const ipadCursorPlugin = {
-  install(app: App, options?: IpadCursorConfig) {    
+  install(app: App, options?: IpadCursorConfig): any {    
     options && updateConfig(options);
 
     function createDirective(type: "block" | "text") {
