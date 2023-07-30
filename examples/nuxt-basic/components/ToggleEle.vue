@@ -12,16 +12,16 @@ function toggle() {
 
 <template>
   <div h-50px>
-    <button btn data-cursor="block" @click="toggle">
+    <button v-cursor-block btn @click="toggle">
       toggle
     </button>
 
-    <button v-if="show" btn data-cursor="block" @click="toggle">
+    <button v-if="show" v-cursor-block btn @click="toggle">
       toggle
     </button>
 
     <div>
-      <button btn data-cursor="block" @click="toggle">
+      <button v-cursor-block btn @click="toggle">
         toggle
       </button>
     </div>

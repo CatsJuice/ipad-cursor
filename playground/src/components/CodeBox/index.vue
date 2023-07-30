@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watchEffect } from "vue";
+import { computed, ref } from "vue";
 import LanguageIcon from "../LanguageIcon.vue";
 import type { Code } from "../../types/lang";
-import { useCursor } from "../../../../src/vue";
 import { useClipboard } from "@vueuse/core";
 
 const props = defineProps<{
@@ -10,18 +9,11 @@ const props = defineProps<{
 }>();
 
 const active = ref(0);
-const { updateCursor, customCursorStyle } = useCursor();
 const { copy } = useClipboard();
 
 const activeCode = computed(() => props.codes[active.value]);
 
-watchEffect(() => {
-  if (activeCode.value) {
-    nextTick(() => updateCursor());
-  }
-});
-
-function onCopy(e: MouseEvent) {
+function onCopy(e: any) {
   const el = e.target as HTMLElement;
   const tooltip = document.createElement("div");
   const rect = el.getBoundingClientRect();
@@ -54,7 +46,7 @@ function onCopy(e: MouseEvent) {
     <header relative flex="~ gap-3" items-center w-full>
       <div v-for="({ lang, title }, index) in codes" :key="title || lang">
         <div
-          data-cursor="block"
+          v-cursor-block="{ background: 'rgba(255, 255, 255, 0.2)' }"
           :class="{ 'lang-tab--active': active === index }"
           class="lang-tab"
           flex="~ gap-2"
@@ -66,11 +58,6 @@ function onCopy(e: MouseEvent) {
           py1
           font-500
           text-white
-          :data-cursor-style="
-            customCursorStyle({
-              background: 'rgba(255, 255, 255, 0.2)',
-            })
-          "
         >
           <LanguageIcon :lang="lang" />
           <div v-if="title">{{ title }}</div>
@@ -87,7 +74,7 @@ function onCopy(e: MouseEvent) {
       w-full
       overflow-auto
       rounded-2
-      data-cursor="text"
+      v-cursor-text
     >
       <highlightjs
         :key="activeCode.lang"
@@ -104,7 +91,7 @@ function onCopy(e: MouseEvent) {
       w-36px
       h-36px
       class="icon-btn"
-      data-cursor="block"
+      v-cursor-block
       p="1"
       text-sm
       flex-center

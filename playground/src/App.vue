@@ -1,23 +1,12 @@
 <script setup lang="ts">
 import AppHeader from "./components/AppHeader.vue";
 import { useCursor } from "../../src/vue/index";
-import { watchEffect } from "vue";
 import { useDark } from "@vueuse/core";
 import { useHead } from "@unhead/vue";
+import { watchEffect } from 'vue';
 
 const isDark = useDark();
-const { updateConfig } = useCursor({
-  enableMouseDownEffect: true,
-  enableAutoTextCursor: true,
-  enableLighting: true,
-  normalStyle: {
-    scale: 1,
-  },
-  blockPadding: "auto",
-  blockStyle: {
-    radius: "auto",
-  },
-});
+const { updateConfig } = useCursor();
 
 const appName = "ipad-cursor";
 const appDesc = "iPad Cursor Effect in Browser";
