@@ -136,7 +136,7 @@
     useCursor()
     </script>
     ```
-  - **directive**
+  - **directive** (v0.5.2+)
 
     Register plugin globally
     ```ts
