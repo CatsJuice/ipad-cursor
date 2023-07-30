@@ -535,6 +535,7 @@ function queryAllTargets() {
  * @returns
  */
 function updateCursor() {
+  initCursor()
   if (isServer || !ready) return;
   const nodesMap = new Map();
   // addDataCursorText(document.body.childNodes)

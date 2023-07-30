@@ -1,5 +1,5 @@
 import { onMounted, onUnmounted } from "vue";
-import type { App, Directive } from "vue";
+import type { App, Directive, Plugin } from "vue";
 import {
   CursorType,
   initCursor,
@@ -12,8 +12,9 @@ import {
   customCursorStyle,
 } from "..";
 
-export const ipadCursorPlugin = {
+export const ipadCursorPlugin: Plugin = {
   install(app: App, options?: IpadCursorConfig): any {    
+    initCursor();
     options && updateConfig(options);
 
     function createDirective(type: "block" | "text") {
@@ -30,7 +31,7 @@ export const ipadCursorPlugin = {
           }
           updateCursor();
         },
-        unmounted: (el, binding) => updateCursor(),
+        unmounted: () => updateCursor(),
       } as Directive<any, (IpadCursorStyle & Record<string, any>) | string>
     }
 
