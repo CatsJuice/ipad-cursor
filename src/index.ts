@@ -416,7 +416,15 @@ function updateConfig(_config: IpadCursorConfig) {
       30
     );
   }
-  return Utils.mergeDeep(config, _config);
+  const newConfig = Utils.mergeDeep(config, _config);
+  if (!isBlockActive && !isTextActive && _config.normalStyle) {
+    updateCursorStyle(Utils.style2Vars(newConfig.normalStyle!));
+  } else if (isBlockActive && _config.blockStyle) {
+    updateCursorStyle(Utils.style2Vars(newConfig.blockStyle!));
+  } else if (isTextActive && _config.textStyle) {
+    updateCursorStyle(Utils.style2Vars(newConfig.textStyle!));
+  }
+  return newConfig;
 }
 
 /**
