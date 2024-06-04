@@ -138,7 +138,7 @@ let isMouseDown = false;
 let styleTag: HTMLStyleElement | null = null;
 let latestCursorStyle: Record<string, any> = {};
 let mousedownStyleRecover: Record<string, any> = {};
-const position = { x: 0, y: 0 };
+const position = { x: -100, y: -100};
 const isServer = typeof document === "undefined";
 const registeredNodeSet = new Set<Element>();
 const eventMap = new Map<
