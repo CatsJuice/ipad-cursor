@@ -235,7 +235,7 @@ function getDefaultConfig(): IpadCursorConfig {
   const normalStyle: IpadCursorStyle = {
     width: "20px",
     height: "20px",
-    radius: "50%",
+    radius: "10px",
     durationBase: "0.23s",
     durationPosition: "0s",
     durationBackdropFilter: "0s",
